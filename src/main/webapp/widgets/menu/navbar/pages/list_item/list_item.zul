@@ -1,16 +1,47 @@
-<div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.example.list_group.ListGroupViewModel')">
-    <listbox model="@load(vm.groupModel)" height="400px" checkmark="true"
-             onSelect="@command('selectGroup', data=event.reference.value)" multiple="true"
-             itemRenderer="org.example.list_group.FoodListGroupRenderer">
-        <!-- Make Grouping item selectable-->
-        <custom-attributes org.zkoss.zul.listbox.groupSelect="true" />
-        <listhead>
-            <listheader width="160px" sort="auto(Category)" label="Category" />
-            <listheader width="140px" sort="auto(Name)" label="Name" />
-            <listheader hflex="1" sort="auto(TopNutrients)" label="Top Nutrients" />
-            <listheader hflex="1" align="center" sort="auto(DailyPercent)" label="% of Daily" />
-            <listheader hflex="1" align="center" sort="auto(Calories)" label="Calories" />
-            <listheader width="140px" sort="auto(Quantity)" label="Quantity" />
-        </listhead>
-    </listbox>
-</div>
+<zk>
+    <div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.example.list_group.ListGroupViewModel')">
+        <listbox model="@load(vm.groupModel)" height="400px" checkmark="true"
+                 onSelect="@command('selectGroup', data=event.reference.value)" multiple="true"
+                 itemRenderer="org.example.list_group.FoodListGroupRenderer">
+            <!-- Make Grouping item selectable-->
+            <custom-attributes org.zkoss.zul.listbox.groupSelect="true"/>
+            <listhead>
+                <listheader width="160px" sort="auto(Category)" label="Category"/>
+                <listheader width="140px" sort="auto(Name)" label="Name"/>
+                <listheader hflex="1" sort="auto(TopNutrients)" label="Top Nutrients"/>
+                <listheader hflex="1" align="center" sort="auto(DailyPercent)" label="% of Daily"/>
+                <listheader hflex="1" align="center" sort="auto(Calories)" label="Calories"/>
+                <listheader width="140px" sort="auto(Quantity)" label="Quantity"/>
+            </listhead>
+        </listbox>
+    </div>
+    <div apply="org.zkoss.bind.BindComposer"
+         viewModel="@id('vm') @init('org.example.viewmodel.PagingViewModel')">
+        <grid id="grid"
+              model="@load(vm.allPurchases)"
+              mold="paging" pageSize="6">
+            <columns>
+                <column hflex="1" label="Order #" align="left"/>
+                <column hflex="2" label="Item Purchased" align="center"/>
+                <column hflex="2" label="Purchased Time" align="center"/>
+                <column hflex="1" label="Paid" align="center"/>
+            </columns>
+            <template name="model">
+                <row>
+                    <label value="@load(each.id)"/>
+                    <listbox mold="select" hflex="1"
+                             model="@load(vm.availableItems)" selectedItem="@bind(each.item)">
+                        <template name="model">
+                            <listitem label="@load(each)"/>
+                        </template>
+                    </listbox>
+                    <timebox format="a hh:mm:ss" mold="rounded" hflex="1"
+                             value="@load(each.time)"/>
+                    <checkbox hflex="1"
+                              label="@load(each.paid ? 'yes' : 'no')"
+                              checked="@bind(each.paid)"/>
+                </row>
+            </template>
+        </grid>
+    </div>
+</zk>
