@@ -1,0 +1,12 @@
+org\example\list_group\FoodGroupsModel.class
+org\example\grouping_model\FoodComparator.class
+org\example\grouping_model\FoodFilter.class
+org\example\data\pojo\Food.class
+org\example\navbar\NavigationPage.class
+org\example\navbar\NavigationViewModel.class
+org\example\data\FoodData.class
+org\example\list_group\FoodListGroupRenderer.class
+org\example\list_group\FoodGroupsModel$FoodGroupInfo.class
+org\example\MyViewModel.class
+org\example\navbar\NavigationViewModel$1.class
+org\example\list_group\ListGroupViewModel.class
