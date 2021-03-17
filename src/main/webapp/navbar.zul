@@ -1,78 +1,126 @@
 <zk>
-	<style src="/widgets/menu/navbar/style.css"/>
+    <style src="/widgets/menu/navbar/style.css"/>
 
-	<div id="container" sclass="vertical" apply="org.zkoss.bind.BindComposer"
-		 viewModel="@id('vm') @init('org.example.navbar.NavigationViewModel')">
+    <div id="container" sclass="vertical" apply="org.zkoss.bind.BindComposer"
+         viewModel="@id('vm') @init('org.example.navbar.NavigationViewModel')">
+        <div>
+            <navbar id="navbar" orient="vertical" collapsed="false"
+                    onSelect="@command('navigatePage', target=self.selectedItem.attributes['navigationPage'])">
+                <nav label="ZK's Pizza" iconSclass="z-icon-home"
+                     children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
 
-		<splitlayout vflex="1" hflex="1" orient="horizontal" >
-			<div sclass="area" vflex="1" hflex="1">
-				<navbar id="navbar" orient="vertical" collapsed="false"
-						onSelect="@command('navigatePage', target=self.selectedItem.attributes['navigationPage'])">
+                <nav label="Customers" iconSclass="z-icon-group" badgeText="3"
+                     children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
 
+                <nav label="Orders" iconSclass="z-icon-truck" badgeText="4"
+                     children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
 
-					<nav label="ZK's Pizza" iconSclass="z-icon-home"
-						 children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
+                <nav label="Fan Service" iconSclass="z-icon-star"
+                     children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
 
-					<nav label="Customers" iconSclass="z-icon-group" badgeText="3"
-						 children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
+                <template name="navitem" var="navigationPage">
+                    <navitem label="@load(navigationPage.subTitle)" selected="@load(navigationPage.selected)"/>
+                </template>
+            </navbar>
+            <include id="contentInclude" mode="instant" sclass="content"
+                     currentPage="@ref(vm.currentPage)"
+                     src="@load(currentPage.includeUri)"/>
+        </div>
+        <div>
+            <div>
+                <style>.count { font-weight: bold; font-size: 16px;color:red } .time { font-size: 16px; } .progress{background:red;display:none;}</style>
+                <zscript>
+                    int countNum = 10;
+                    void restart() {
+                    countNum = 10;
+                    pm.value = 0;
+                    timer.start();
+                    }
+                </zscript>
+                <groupbox mold="3d" closable="false">
+                    <caption label="Timer Demo">
 
-					<nav label="Orders" iconSclass="z-icon-truck" badgeText="4"
-						 children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
+                    </caption>
+                    <vlayout spacing="30px">
+                        <label id="now" sclass="time"/>
+                        <label id="count" sclass="count"/>
+                        <progressmeter id="pm" value="0" width="300px" sclass="progress"/>
+                        <hlayout>
+                            <button label="Start" onClick="timer.start()" width="80px"/>
+                            <button label="Stop" onClick="timer.stop()" width="80px"/>
+                            <button label="Restart" onClick="restart()" width="80px"/>
+                        </hlayout>
+                    </vlayout>
+                </groupbox>
+                <timer id="timer" delay="1000" repeats="true">
+                    <attribute name="onTimer">
+                        now.setValue("Time ：" + new Date().toString());
+                        if (countNum == 0) {
+                        timer.stop();
+                        return;
+                        }
+                        count.value = "Count : " + --countNum + "";
+                        pm.value = pm.value + 10;
+                    </attribute>
+                </timer>
+            </div>
+        </div>
+    </div>
 
-					<nav label="Fan Service" iconSclass="z-icon-star"
-						 children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
+    <div>
+        <hlayout spacing="35px" height="250px">
+            <groupbox vflex="true" closable="false" sclass="z-demo-config">
+                <caption label="Default Buttons"/>
+                <vlayout width="150px">
+                    <hlayout>
+                        <button label="Just Label" hflex="1"/>
+                        <button iconSclass="z-icon-power-off"/>
+                    </hlayout>
+                    <button iconSclass="z-icon-power-off" hflex="1" label="Icon with Label"/>
+                    <button iconSclass="z-icon-power-off" hflex="1" label="Reversed Order" dir="reverse"/>
+                    <hlayout>
+                        <button iconSclass="z-icon-power-off" hflex="1" label="Vertical" orient="vertical"/>
+                        <button iconSclass="z-icon-power-off" hflex="1" label="Reverse" dir="reverse"
+                                orient="vertical"/>
+                    </hlayout>
+                </vlayout>
+            </groupbox>
+            <groupbox vflex="true" closable="false" sclass="z-demo-config">
+                <caption label="Button With Image"/>
+                <vlayout>
+                    <button label="Left" image="/widgets/input/button/img/ArrowLeft-16x16.png"
+                            hoverImage="/widgets/input/button/img/ArrowLeftGreen-16x16.png"
+                            width="125px"/>
 
-					<template name="navitem" var="navigationPage">
-						<navitem label="@load(navigationPage.subTitle)" selected="@load(navigationPage.selected)"/>
-					</template>
-				</navbar>
+                    <button label="Right" image="/widgets/input/button/img/ArrowRight-16x16.png"
+                            hoverImage="/widgets/input/button/img/ArrowRightGreen-16x16.png"
+                            width="125px" dir="reverse"/>
 
+                    <button label="Above" image="/widgets/input/button/img/ArrowUp-16x16.png"
+                            hoverImage="/widgets/input/button/img/ArrowUpGreen-16x16.png"
+                            width="125px" orient="vertical"/>
 
-
-			</div>
-			<div sclass="area" vflex="1"  hflex="2">
-				<div>
-					<style>.count { font-weight: bold; font-size: 16px; } .time { font-size: 16px; }</style>
-					<zscript>
-						int countNum = 10;
-						void restart() {
-						countNum = 10;
-						pm.value = 0;
-						timer.start();
-						}
-					</zscript>
-					<groupbox mold="3d" closable="false">
-						<caption label="Timer Demo">
-
-						</caption>
-						<vlayout spacing="30px">
-							<label id="now" sclass="time" />
-							<label id="count" sclass="count" />
-							<progressmeter id="pm" value="0" width="300px" />
-							<hlayout>
-								<button label="Start" onClick="timer.start()" width="80px" />
-								<button label="Stop" onClick="timer.stop()" width="80px" />
-								<button label="Restart" onClick="restart()" width="80px" />
-							</hlayout>
-						</vlayout>
-					</groupbox>
-					<timer id="timer" delay="1000" repeats="true">
-						<attribute name="onTimer">
-							now.setValue("Time ：" + new Date().toString());
-							if (countNum == 0) {
-							timer.stop();
-							return;
-							}
-							count.value = "Count : " + --countNum + "";
-							pm.value = pm.value + 10;
-						</attribute>
-					</timer>
-				</div>
-				<include id="contentInclude" mode="instant" sclass="content"
-						 currentPage="@ref(vm.currentPage)"
-						 src="@load(currentPage.includeUri)" />
-			</div>
-		</splitlayout>
-
-	</div>
+                    <button label="Below" image="/widgets/input/button/img/ArrowDown-16x16.png"
+                            hoverImage="/widgets/input/button/img/ArrowDownGreen-16x16.png"
+                            width="125px" orient="vertical" dir="reverse"/>
+                </vlayout>
+            </groupbox>
+            <groupbox vflex="true" closable="false" sclass="z-demo-config">
+                <caption label="Big Button (custom styling)"/>
+                <button sclass="bigbutton" iconSclass="z-icon-ban" width="200px" height="200px"/>
+            </groupbox>
+        </hlayout>
+        <style>
+            .bigbutton {
+            border-radius: 8px;
+            }
+            .bigbutton > i {
+            font-size: 150px;
+            opacity: 0.6;
+            }
+            .iceblue_c .bigbutton > i {
+            opacity: 0.9;
+            }
+        </style>
+    </div>
 </zk>

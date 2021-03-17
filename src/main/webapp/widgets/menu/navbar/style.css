@@ -1,5 +1,5 @@
 .horizontal, .vertical {
-	/*min-height: 300px;*/
+	min-height: 300px;
 	background-color: #EAE7E7;
 }
 .z-navbar {
@@ -36,4 +36,7 @@
 }
 .content .subTitle {
 	margin: 0;
+}
+.progressmester{
+	display: none;
 }
