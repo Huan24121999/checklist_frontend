@@ -21,8 +21,11 @@ public class ListGroup2ViewModel {
     @Init
     public void init() {
         ChecklistItemApi checklistItemApi = ChecklistItemApi.getInstance();
-        checklistGroupsModel = new ChecklistGroupsModel(checklistItemApi.getAll().toArray(new ChecklistItem[0]), new ChecklistComparator());
-        checklistGroupsModel.setMultiple(true);
+        List<ChecklistItem> checklistItems= checklistItemApi.getAll();
+        if(checklistItems!=null) {
+            checklistGroupsModel = new ChecklistGroupsModel(checklistItems.toArray(new ChecklistItem[0]), new ChecklistComparator());
+            checklistGroupsModel.setMultiple(true);
+        }
     }
 
     public ChecklistGroupsModel getChecklistGroupsModel() {
