@@ -10,6 +10,10 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 public class ListGroup2ViewModel {
 
     private ChecklistGroupsModel checklistGroupsModel;
@@ -66,6 +70,14 @@ public class ListGroup2ViewModel {
 
     @Command("execute")
     public void execute(){
-        System.out.println(checklistGroupsModel.getSelection());
+        List<Integer> ids=new ArrayList<>();
+        Set<Object> checklistItemList= checklistGroupsModel.getSelection();
+        for (Object object: checklistItemList
+             ) {
+            ChecklistItem checklistItem=(ChecklistItem) object;
+            ids.add(checklistItem.getId());
+        }
+        ChecklistItemApi checklistItemApi= ChecklistItemApi.getInstance();
+        checklistItemApi.Execute(ids);
     }
 }
