@@ -14,6 +14,11 @@ public class FoodGroupsModel extends GroupsModelArray<Food, FoodGroupsModel.Food
 	}
 
 	protected FoodGroupInfo createGroupHead(Food[] groupdata, int index, int col) {
+		System.out.println("GROUP DATA");
+		System.out.println(groupdata.length);
+		System.out.println(groupdata);
+		System.out.println(index);
+		System.out.println(col);
 		return new FoodGroupInfo(groupdata[0], index, col);
 	}
 

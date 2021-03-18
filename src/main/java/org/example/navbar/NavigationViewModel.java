@@ -15,7 +15,7 @@ public class NavigationViewModel {
 	@Init
 	public void init() {
 		initPageMap();
-		currentPage = pageMap.get("ZK's Pizza").get("About Us");
+		currentPage = pageMap.get("CHECK LIST").get("Check");
 	}
 
 	@Command
@@ -36,22 +36,10 @@ public class NavigationViewModel {
 	private void initPageMap() {
 		pageMap = new LinkedHashMap<String, Map<String, NavigationPage>>();
 		
-		addPage("ZK's Pizza", "CHECK LIST", "/list_item/list_item.zul");
-		addPage("ZK's Pizza", "About Us", "/home/about_us.zul");
-		addPage("ZK's Pizza", "Menu", "/home/menu.zul");
-		addPage("ZK's Pizza", "FAQ", "/home/faq.zul");
-		addPage("ZK's Pizza", "Press", "/home/press.zul");
+		addPage("CHECK LIST", "Check", "/list_item/list_item.zul");
+		addPage("CHECK LIST", "Configuration", "/home/about_us.zul");
 
-		addPage("Customers", "Active Members", "/customers/customers.zul", "active");
-		addPage("Customers", "Inactive Members", "/customers/customers.zul", "inactive");
-
-		addPage("Orders", "In Preparation", "/orders/orders.zul", "in-preparation");
-		addPage("Orders", "Ready for Shipping", "/orders/orders.zul", "ready");
-		addPage("Orders", "Shipping", "/orders/orders.zul", "shipping");
-		addPage("Orders", "Specified for Later", "/orders/orders.zul", "later");
-		
-		addPage("Fan Service", "Events", "/fan_service/events.zul");
-		addPage("Fan Service", "Promotion", "/fan_service/promotion.zul");
+		addPage("HELP", "Active Members", "/customers/customers.zul", "active");
 	}
 
 	private void addPage(String title, String subTitle, String includeUri) {

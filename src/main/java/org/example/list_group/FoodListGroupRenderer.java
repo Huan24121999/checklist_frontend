@@ -12,6 +12,9 @@ public class FoodListGroupRenderer implements ListitemRenderer<Object> {
 			FoodGroupsModel.FoodGroupInfo groupInfo = (FoodGroupsModel.FoodGroupInfo) obj;
 			Food food = groupInfo.getFirstChild();
 			String groupTxt;
+			System.out.println(groupInfo.getGroupIndex());
+			System.out.println(groupInfo.getColIndex());
+			System.out.println(groupInfo.getFirstChild().toString());
 			switch (groupInfo.getColIndex()) {
 			case 0:
 				groupTxt = food.getCategory();
