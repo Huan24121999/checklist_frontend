@@ -2,7 +2,9 @@ package org.example.restapi;
 
 import com.google.gson.Gson;
 import org.example.model.ChecklistItem;
+import org.example.model.ResultItem;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
@@ -57,6 +59,22 @@ public class ChecklistItemApi {
         return groupItems;
     }
 
+    public List<ResultItem> Execute(List<Integer> ids){
+        try {
+            WebTarget webTarget = BaseConfig.getWebTarget().path("/execute/");
+            Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
+            Response response = invocationBuilder.post(Entity.entity(ids, MediaType.APPLICATION_JSON));
+            System.out.println(response);
+            ArrayList res = (ArrayList) response.readEntity(Map.class).get("data");
+            String jsonString = new Gson().toJson(res, ArrayList.class);
+            ResultItem[] resultItems = new Gson().fromJson(jsonString, ResultItem[].class);
+            System.out.println(resultItems);
+            return Arrays.asList(resultItems);
+        }catch (Exception ex){
+            System.out.println(ex.getCause());
+            return null;
+        }
+    }
 
 }
 

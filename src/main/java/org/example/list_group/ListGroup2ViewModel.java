@@ -16,7 +16,7 @@ public class ListGroup2ViewModel {
 
     @Init
     public void init() {
-        ChecklistItemApi checklistItemApi= ChecklistItemApi.getInstance();
+        ChecklistItemApi checklistItemApi = ChecklistItemApi.getInstance();
         checklistGroupsModel = new ChecklistGroupsModel(checklistItemApi.getAll().toArray(new ChecklistItem[0]), new ChecklistComparator());
         checklistGroupsModel.setMultiple(true);
     }
@@ -27,14 +27,14 @@ public class ListGroup2ViewModel {
 
     @Command("selectGroup")
     public void selectGroup(@BindingParam("data") Object data) {
-        if(data instanceof ChecklistGroupsModel.CheckListGroupInfo) {
-            ChecklistGroupsModel.CheckListGroupInfo groupInfo = (ChecklistGroupsModel.CheckListGroupInfo)data;
-            int groupIndex = groupInfo.getGroupIndex() ;
+        if (data instanceof ChecklistGroupsModel.CheckListGroupInfo) {
+            ChecklistGroupsModel.CheckListGroupInfo groupInfo = (ChecklistGroupsModel.CheckListGroupInfo) data;
+            int groupIndex = groupInfo.getGroupIndex();
             int childCount = checklistGroupsModel.getChildCount(groupIndex);
             boolean added = checklistGroupsModel.isSelected(groupInfo);
-            for(int childIndex = 0; childIndex < childCount; childIndex++) {
+            for (int childIndex = 0; childIndex < childCount; childIndex++) {
                 ChecklistItem checklistItem = checklistGroupsModel.getChild(groupIndex, childIndex);
-                if(added) {
+                if (added) {
                     checklistGroupsModel.addToSelection(checklistItem);
                 } else {
                     checklistGroupsModel.removeFromSelection(checklistItem);
@@ -43,9 +43,29 @@ public class ListGroup2ViewModel {
         }
     }
 
-    @Command("closeAll")
-    public void closeAll(){
-        System.out.println("CLOSE ALL");
+    @Command("refresh")
+    public void refresh() {
         checklistGroupsModel.clearSelection();
+    }
+
+    @Command("closeAll")
+    public void closeAll() {
+        int length = checklistGroupsModel.getGroupCount();
+        for (int i = 0; i < length; i++) {
+            checklistGroupsModel.setClose(i,true);
+        }
+    }
+
+    @Command("expandAll")
+    public void expandAll() {
+        int length = checklistGroupsModel.getGroupCount();
+        for (int i = 0; i < length; i++) {
+            checklistGroupsModel.setClose(i,false);
+        }
+    }
+
+    @Command("execute")
+    public void execute(){
+        System.out.println(checklistGroupsModel.getSelection());
     }
 }

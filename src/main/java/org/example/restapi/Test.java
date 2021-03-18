@@ -15,10 +15,11 @@ import java.util.*;
 public class Test {
     public static void main(String[] args) {
         ChecklistItemApi checklistItemApi= ChecklistItemApi.getInstance();
-        Map<String,List<ChecklistItem>> groupItems= checklistItemApi.getGroupItems();
-        System.out.println(groupItems.size());
-        System.out.println(checklistItemApi.getGroupItems());
-//        test2();
+        List<Integer> ids= new ArrayList<>();
+        ids.add(1);
+        ids.add(2);
+        ids.add(3);
+        System.out.println(checklistItemApi.Execute(ids));
         System.out.println("Finish");
     }
 
