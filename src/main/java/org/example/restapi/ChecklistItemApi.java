@@ -25,8 +25,10 @@ public class ChecklistItemApi {
             WebTarget webTarget = BaseConfig.getWebTarget().path("/checklist-item/get-all");
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
             Response response = invocationBuilder.get();
-            ArrayList res = (ArrayList) response.readEntity(Map.class).get("data");
+            ArrayList res = (ArrayList) response.readEntity(Map.class).get("data");;
             String jsonString = new Gson().toJson(res, ArrayList.class);
+            System.out.println("==========================");
+            System.out.println(jsonString);
             ChecklistItem[] checklistItems = new Gson().fromJson(jsonString, ChecklistItem[].class);
             return Arrays.asList(checklistItems);
         } catch (Exception ex) {

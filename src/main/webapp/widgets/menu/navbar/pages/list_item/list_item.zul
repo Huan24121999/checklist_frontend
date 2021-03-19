@@ -1,65 +1,9 @@
 <zk>
-<!--    process bar-->
-<!--    <div  apply="org.zkoss.bind.BindComposer" viewModel="@id('lt') @init('org.example.list_group.ListGroup2ViewModel')">-->
-<!--        <style>.count { font-weight: bold; font-size: 16px; } .time { font-size: 16px; } .progress{display:none;}</style>-->
-<!--        <zscript>-->
-<!--            int countNum = 10;-->
-<!--            void restart() {-->
-<!--            countNum = 10;-->
-<!--            pm.value = 0;-->
-<!--            timer.start();-->
-<!--            }-->
-<!--        </zscript>-->
-<!--        <groupbox mold="3d" closable="false">-->
-<!--            <caption label="Timer Demo">-->
 
-<!--            </caption>-->
-<!--            <vlayout spacing="30px">-->
-
-<!--                <label id="now" sclass="time"/>-->
-<!--                <label id="count" sclass="count"/>-->
-<!--                <progressmeter id="pm" value="0" width="300px" sclass="progress"/>-->
-<!--                <hlayout>-->
-<!--                    <button label="Close All" onClick="@command('closeAll')" width="100px"/>-->
-<!--                    <button label="Expand All" onClick="timer.stop()" width="100px"/>-->
-<!--                    <button label="Refresh" onClick="restart()" width="100px"/>-->
-<!--                    <button label="Execute" onClick="restart()" width="100px"/>-->
-<!--                </hlayout>-->
-<!--            </vlayout>-->
-<!--        </groupbox>-->
-<!--        <timer id="timer" delay="1000" repeats="true">-->
-<!--            <attribute name="onTimer">-->
-<!--                now.setValue("Time ：" + new Date().toString());-->
-<!--                if (countNum == 0) {-->
-<!--                timer.stop();-->
-<!--                return;-->
-<!--                }-->
-<!--                count.value = "Count : " + &#45;&#45;countNum + "";-->
-<!--                pm.value = pm.value + 10;-->
-<!--            </attribute>-->
-<!--        </timer>-->
-<!--    </div>-->
-
-<!--    data bar-->
-<!--    <div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.example.list_group.ListGroupViewModel')">-->
-<!--        <listbox model="@load(vm.groupModel)" height="400px" checkmark="true"-->
-<!--                 onSelect="@command('selectGroup', data=event.reference.value)" multiple="true"-->
-<!--                 itemRenderer="org.example.list_group.FoodListGroupRenderer">-->
-<!--            &lt;!&ndash; Make Grouping item selectable&ndash;&gt;-->
-<!--            <custom-attributes org.zkoss.zul.listbox.groupSelect="true"/>-->
-<!--            <listhead>-->
-<!--                <listheader width="160px" sort="auto(Category)" label="Category"/>-->
-<!--                <listheader width="140px" sort="auto(Name)" label="Name"/>-->
-<!--                <listheader hflex="1" sort="auto(TopNutrients)" label="Top Nutrients"/>-->
-<!--                <listheader hflex="1" align="center" sort="auto(DailyPercent)" label="% of Daily"/>-->
-<!--                <listheader hflex="1" align="center" sort="auto(Calories)" label="Calories"/>-->
-<!--                <listheader width="140px" sort="auto(Quantity)" label="Quantity"/>-->
-<!--            </listhead>-->
-<!--        </listbox>-->
-<!--    </div>-->
-
-    <div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.example.list_group.ListGroup2ViewModel')">
-        <style>.count { font-weight: bold; font-size: 16px; } .time { font-size: 16px; } .progress{display:none;}</style>
+    <div apply="org.zkoss.bind.BindComposer"
+         viewModel="@id('vm') @init('org.example.list_group.ListGroup2ViewModel')">
+        <style>.count { font-weight: bold; font-size: 16px; } .time { font-size: 16px; } .progress{display:none;}
+        </style>
         <zscript>
             int countNum = 10;
             void restart() {
@@ -80,7 +24,7 @@
                 <hlayout>
                     <button label="Close All" onClick="@command('closeAll')" width="100px"/>
                     <button label="Expand All" onClick="@command('expandAll')" width="100px"/>
-                    <button label="Refresh" onClick="@command('refresh')"  width="100px"/>
+                    <button label="Refresh" onClick="@command('refresh')" width="100px"/>
                     <button label="Execute" onClick="@command('execute')" width="100px"/>
                 </hlayout>
             </vlayout>
@@ -96,46 +40,38 @@
                 pm.value = pm.value + 10;
             </attribute>
         </timer>
-        <listbox model="@load(vm.checklistGroupsModel)" height="400px" checkmark="true"
+        <listbox id="listbox" model="@load(vm.checklistGroupsModel)" height="400px" checkmark="true"
                  onSelect="@command('selectGroup', data=event.reference.value)" multiple="true"
                  itemRenderer="org.example.renderer.CheckListRenderer">
             <!-- Make Grouping item selectable-->
-            <custom-attributes org.zkoss.zul.listbox.groupSelect="true"/>
+            <custom-attributes id="group_select" org.zkoss.zul.listbox.groupSelect="true"/>
             <listhead>
                 <listheader width="150px" sort="auto(ChecklistGroup.name)" label="Category"/>
                 <listheader width="200px" sort="auto(Name)" label="Name"/>
                 <listheader hflex="400px" sort="auto(Description)" label="Description"/>
-                <listheader hflex="200px" sort="auto(Server.name)" align="center"  label="Server Check"/>
+                <listheader hflex="200px" sort="auto(Server.name)" align="center" label="Server Check"/>
             </listhead>
         </listbox>
+
+
+        <grid id="grid"
+              model="@load(vm.checklistHistories)"
+              mold="paging" pageSize="2">
+            <columns>
+                <column hflex="1" label="Start #" align="left"/>
+                <column hflex="2" label="End " align="center"/>
+                <column hflex="2" label="Result " align="center"/>
+                <column hflex="1" label="User" align="center"/>
+            </columns>
+            <template name="model">
+                <row onClick="@command('selectHistory', data=each)">
+                    <label value="@load(each.startTime)"/>
+                    <label value="@load(each.endTime)"/>
+                    <label value="@load(each.result)"/>
+                    <label value="@load(each.id)"/>
+                </row>
+            </template>
+        </grid>
     </div>
-<!--    <div apply="org.zkoss.bind.BindComposer"-->
-<!--         viewModel="@id('vm') @init('org.example.viewmodel.PagingViewModel')">-->
-<!--        <grid id="grid"-->
-<!--              model="@load(vm.allPurchases)"-->
-<!--              mold="paging" pageSize="6">-->
-<!--            <columns>-->
-<!--                <column hflex="1" label="Order #" align="left"/>-->
-<!--                <column hflex="2" label="Item Purchased" align="center"/>-->
-<!--                <column hflex="2" label="Purchased Time" align="center"/>-->
-<!--                <column hflex="1" label="Paid" align="center"/>-->
-<!--            </columns>-->
-<!--            <template name="model">-->
-<!--                <row>-->
-<!--                    <label value="@load(each.id)"/>-->
-<!--                    <listbox mold="select" hflex="1"-->
-<!--                             model="@load(vm.availableItems)" selectedItem="@bind(each.item)">-->
-<!--                        <template name="model">-->
-<!--                            <listitem label="@load(each)"/>-->
-<!--                        </template>-->
-<!--                    </listbox>-->
-<!--                    <timebox format="a hh:mm:ss" mold="rounded" hflex="1"-->
-<!--                             value="@load(each.time)"/>-->
-<!--                    <checkbox hflex="1"-->
-<!--                              label="@load(each.paid ? 'yes' : 'no')"-->
-<!--                              checked="@bind(each.paid)"/>-->
-<!--                </row>-->
-<!--            </template>-->
-<!--        </grid>-->
-<!--    </div>-->
+
 </zk>

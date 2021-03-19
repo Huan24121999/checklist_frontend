@@ -9,6 +9,7 @@ public class CheckListRenderer implements ListitemRenderer<Object> {
     @Override
     public void render(Listitem listitem, Object obj, int index) throws Exception {
 
+        System.out.println("HAHAHAHAH");
         if (listitem instanceof Listgroup) {
             ChecklistGroupsModel.CheckListGroupInfo groupInfo = (ChecklistGroupsModel.CheckListGroupInfo) obj;
             ChecklistItem checklistItem = groupInfo.getFirstChild();

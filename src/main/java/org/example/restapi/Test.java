@@ -2,7 +2,9 @@ package org.example.restapi;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.gson.Gson;
+import org.example.model.ChecklistHistory;
 import org.example.model.ChecklistItem;
+import org.example.model.ResultItem;
 import org.zkoss.json.JSONObject;
 
 import javax.ws.rs.client.Invocation;
@@ -14,12 +16,24 @@ import java.util.*;
 
 public class Test {
     public static void main(String[] args) {
-        ChecklistItemApi checklistItemApi= ChecklistItemApi.getInstance();
-        List<Integer> ids= new ArrayList<>();
-        ids.add(1);
-        ids.add(2);
-        ids.add(3);
-        System.out.println(checklistItemApi.Execute(ids));
+//        ChecklistItemApi checklistItemApi= ChecklistItemApi.getInstance();
+//        List<Integer> ids= new ArrayList<>();
+//        ids.add(1);
+//        ids.add(2);
+//        ids.add(3);
+//        System.out.println(checklistItemApi.Execute(ids));
+//        ChecklistHistoryApi checklistHistoryApi= ChecklistHistoryApi.getInstance();;
+//        System.out.println(checklistHistoryApi.getAll());
+
+        try {
+            String check = "[{\"itemId\":1,\"isPassed\":false,\"detail\":\"Error: java.net.ConnectException: Connection timed out: connect\"},{\"itemId\":3,\"isPassed\":false,\"detail\":\"Error: java.net.ConnectException: Connection timed out: connect\"},{\"itemId\":2,\"isPassed\":false,\"detail\":\"Error: java.net.ConnectException: Connection timed out: connect\"}]";
+            ResultItem[] resultItems = new Gson().fromJson(check, ResultItem[].class);
+            System.out.println(resultItems);
+            System.out.println(resultItems.length);
+        }catch (Exception ex){
+            System.out.println(ex.getCause());
+        }
+
         System.out.println("Finish");
     }
 
