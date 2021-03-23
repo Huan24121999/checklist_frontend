@@ -1,6 +1,7 @@
 package org.example.restapi;
 
 import com.google.gson.Gson;
+import org.example.model.ChecklistHistory;
 import org.example.model.ChecklistItem;
 import org.example.model.ResultItem;
 
@@ -61,19 +62,24 @@ public class ChecklistItemApi {
         return groupItems;
     }
 
-    public List<ResultItem> Execute(List<Integer> ids){
+    public ChecklistHistory Execute(List<Integer> ids){
         try {
             WebTarget webTarget = BaseConfig.getWebTarget().path("/execute/");
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
             Response response = invocationBuilder.post(Entity.entity(ids, MediaType.APPLICATION_JSON));
             System.out.println(response);
-            ArrayList res = (ArrayList) response.readEntity(Map.class).get("data");
-            String jsonString = new Gson().toJson(res, ArrayList.class);
-            ResultItem[] resultItems = new Gson().fromJson(jsonString, ResultItem[].class);
+            System.out.println("LOIIIIIIIIII");
+            HashMap res = (HashMap) response.readEntity(Map.class).get("data");
+            System.out.println("RES");
+            System.out.println(res);
+            String jsonString = new Gson().toJson(res, HashMap.class);
+            System.out.println("dataaaaaaaaaaaaa");
+            System.out.println(jsonString);
+            ChecklistHistory resultItems = new Gson().fromJson(jsonString, ChecklistHistory.class);
             System.out.println(resultItems);
-            return Arrays.asList(resultItems);
+            return resultItems;
         }catch (Exception ex){
-            System.out.println(ex.getCause());
+            System.out.println(ex.getMessage());
             return null;
         }
     }

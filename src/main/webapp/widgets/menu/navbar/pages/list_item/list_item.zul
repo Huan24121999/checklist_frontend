@@ -1,7 +1,6 @@
-<zk>
-
-    <div apply="org.zkoss.bind.BindComposer"
-         viewModel="@id('vm') @init('org.example.list_group.ListGroup2ViewModel')">
+<zk xmlns:n="xhtml">
+    <n:div apply="org.zkoss.bind.BindComposer"
+           viewModel="@id('vm') @init('org.example.list_group.ListGroup2ViewModel')">
         <style>.count { font-weight: bold; font-size: 16px; } .time { font-size: 16px; } .progress{display:none;}
         </style>
         <zscript>
@@ -55,8 +54,8 @@
 
 
         <grid id="grid"
-              model="@load(vm.checklistHistories)"
-              mold="paging" pageSize="2">
+              model="@bind(vm.checklistHistories)"
+              mold="paging" pageSize="5">
             <columns>
                 <column hflex="1" label="Start #" align="left"/>
                 <column hflex="2" label="End " align="center"/>
@@ -64,7 +63,7 @@
                 <column hflex="1" label="User" align="center"/>
             </columns>
             <template name="model">
-                <row onClick="@command('selectHistory', data=each)">
+                <row onClick="@command('convertHistory', data=each.id)">
                     <label value="@load(each.startTime)"/>
                     <label value="@load(each.endTime)"/>
                     <label value="@load(each.result)"/>
@@ -72,6 +71,159 @@
                 </row>
             </template>
         </grid>
-    </div>
 
+        <n:div class="card">
+            <n:div class="card-header border-transparent">
+                <n:div class="row">
+                    <n:div class="col-12 col-sm-6 col-md-3">
+                        <n:div class="info-box">
+                            <n:span class="info-box-icon bg-info elevation-1">
+                                <n:i class="fas fa-cog"></n:i>
+                            </n:span>
+
+                            <n:div class="info-box-content">
+                                <n:span class="info-box-text">Total</n:span>
+                                <n:span class="info-box-number">
+                                    15
+                                    <n:small>test case</n:small>
+                                </n:span>
+                            </n:div>
+                            <!-- /.info-box-content -->
+                        </n:div>
+                        <!-- /.info-box -->
+                    </n:div>
+                    <!-- /.col -->
+                    <n:div class="col-12 col-sm-6 col-md-3">
+                        <n:div class="info-box mb-3">
+                            <n:span class="info-box-icon bg-danger elevation-1">
+                                <n:i class="fas fa-thumbs-up"></n:i>
+                            </n:span>
+
+                            <n:div class="info-box-content">
+                                <n:span class="info-box-text">Failed</n:span>
+                                <n:span class="info-box-number">10
+                                    <n:small>test case</n:small>
+                                </n:span>
+                            </n:div>
+                            <!-- /.info-box-content -->
+                        </n:div>
+                        <!-- /.info-box -->
+                    </n:div>
+                    <!-- /.col -->
+
+                    <!-- fix for small devices only -->
+                    <n:div class="clearfix hidden-md-up"></n:div>
+
+                    <n:div class="col-12 col-sm-6 col-md-3">
+                        <n:div class="info-box mb-3">
+                            <n:span class="info-box-icon bg-success elevation-1">
+                                <n:i class="fas fa-shopping-cart"></n:i>
+                            </n:span>
+
+                            <n:div class="info-box-content">
+                                <n:span class="info-box-text">Passed</n:span>
+                                <n:span class="info-box-number">5
+                                    <n:small>test case</n:small>
+                                </n:span>
+                            </n:div>
+                            <!-- /.info-box-content -->
+                        </n:div>
+                        <!-- /.info-box -->
+                    </n:div>
+                    <!-- /.col -->
+                    <n:div class="col-12 col-sm-6 col-md-3">
+                        <n:div class="info-box mb-3">
+                            <n:span class="info-box-icon bg-warning elevation-1">
+                                <n:i class="fas fa-users"></n:i>
+                            </n:span>
+
+                            <n:div class="info-box-content">
+                                <n:span class="info-box-text">Reach Percent</n:span>
+                                <n:span class="info-box-number">33
+                                    <n:small>%</n:small>
+                                </n:span>
+                            </n:div>
+                            <!-- /.info-box-content -->
+                        </n:div>
+                        <!-- /.info-box -->
+                    </n:div>
+                    <!-- /.col -->
+                </n:div>
+            </n:div>
+            <!-- /.card-header -->
+            <n:div class="card-body p-0">
+                <n:div class="table-responsive">
+                    <n:table class="table m-0">
+                        <n:thead>
+                            <n:tr>
+                                <n:th>Type Check</n:th>
+                                <n:th>Name</n:th>
+                                <n:th>Status</n:th>
+                                <n:th>Description</n:th>
+                            </n:tr>
+                        </n:thead>
+                        <n:tbody model="@bind(vm.checklistHistories)">
+
+                            <template name="model">
+                                <n:tr>
+                                    <n:td>
+                                        <n:a href="pages/examples/invoice.html" value="@load(each.startTime)"></n:a>
+                                    </n:td>
+                                    <n:td>Call of Duty IV</n:td>
+                                    <n:td>
+                                        <n:span class="badge badge-danger" value="@load(each.startTime)"></n:span>
+                                    </n:td>
+                                    <n:td>
+                                        <n:div class="sparkbar" data-color="#00a65a" data-height="20">
+                                            <n:b value="@load(each.startTime)">
+                                                OUTCOME: Error: java.net.NoRouteToHostException: No route to host (Host
+                                                unreachable)
+                                            </n:b>
+                                            <n:div value="@load(each.startTime)">
+                                                REQUIRED:12
+                                            </n:div>
+                                        </n:div>
+                                    </n:td>
+                                </n:tr>
+                            </template>
+
+                            <grid>
+                                <columns>
+                                    <column label="Type Check	" />
+                                    <column label="Name" />
+                                    <column label="Status" />
+                                    <column label="Description" />
+                                </columns>
+                                <rows model="@bind(vm.historyResults)">
+                                    <forEach items="@load(vm.historyResults)" >
+                                        <row>
+                                            <label value="@load(each.name)">A</label>
+                                            <cell>
+                                                <label value="@load(each.groupCheck)">B</label>
+                                            </cell>
+                                            <cell>
+                                                <label value="@load(each.isPassed)">B</label>
+                                            </cell>
+                                            <cell>
+                                                <label value="@load(each.result)">B</label>
+                                                <label value="@load(each.requiredResult)">B</label>
+                                            </cell>
+                                        </row>
+                                    </forEach>
+                                </rows>
+                            </grid>
+
+                        </n:tbody>
+                    </n:table>
+                </n:div>
+                <!-- /.table-responsive -->
+            </n:div>
+            <!-- /.card-body -->
+            <n:div class="card-footer clearfix">
+                <n:a href="javascript:void(0)" class="btn btn-sm btn-info float-left">Total: 15 test case</n:a>
+            </n:div>
+            <!-- /.card-footer -->
+        </n:div>
+        <!-- /.card -->
+    </n:div>
 </zk>

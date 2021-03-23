@@ -23,5 +23,4 @@ public class ChecklistHistory {
 
     private String username;
 
-    private ChecklistItem checklistItem;
 }

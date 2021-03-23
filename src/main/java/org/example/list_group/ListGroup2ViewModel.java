@@ -7,12 +7,14 @@ import org.example.grouping_model.ChecklistComparator;
 import org.example.grouping_model.FoodComparator;
 import org.example.model.ChecklistHistory;
 import org.example.model.ChecklistItem;
+import org.example.model.HistoryResult;
 import org.example.model.ResultItem;
 import org.example.restapi.ChecklistHistoryApi;
 import org.example.restapi.ChecklistItemApi;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Listbox;
 
@@ -29,6 +31,8 @@ public class ListGroup2ViewModel {
 
     private ChecklistHistoryApi checklistHistoryApi= ChecklistHistoryApi.getInstance();
 
+    private List<HistoryResult> historyResults=new ArrayList<>();
+
     private final List<ChecklistItem> checklistItemsChild= new ArrayList<>();
 
     @Init
@@ -40,8 +44,20 @@ public class ListGroup2ViewModel {
             checklistGroupsModel.setMultiple(true);
             checklistItemsChild.addAll(checklistItems);
         }
-        checklistHistories=checklistHistoryApi.getAll();
+        checklistHistories.addAll(checklistHistoryApi.getAll());
 
+    }
+
+    public ChecklistHistoryApi getChecklistHistoryApi() {
+        return checklistHistoryApi;
+    }
+
+    public List<HistoryResult> getHistoryResults() {
+        return historyResults;
+    }
+
+    public List<ChecklistItem> getChecklistItemsChild() {
+        return checklistItemsChild;
     }
 
     public ChecklistGroupsModel getChecklistGroupsModel() {
@@ -92,6 +108,7 @@ public class ListGroup2ViewModel {
     }
 
     @Command("execute")
+    @NotifyChange("checklistHistories")
     public void execute(){
         List<Integer> ids=new ArrayList<>();
         Set<Object> checklistItemList= checklistGroupsModel.getSelection();
@@ -103,8 +120,19 @@ public class ListGroup2ViewModel {
             }
         }
         ChecklistItemApi checklistItemApi= ChecklistItemApi.getInstance();
-        if(ids.size()>0)
-            checklistItemApi.Execute(ids);
+        System.out.println("kkkkkkkkkkkkkkkkk");
+        if(ids.size()>0) {
+            try {
+                System.out.println("LON HƠN 0");
+                ChecklistHistory checklistHistory = checklistItemApi.Execute(ids);
+                System.out.println(checklistHistory);
+                checklistHistories.add(0,checklistHistory);
+                System.out.println("DONE");
+            }catch(Exception  ex){
+                System.out.println("LOI ROI");
+                System.out.println(ex.getMessage());
+            }
+        }
     }
 
     @Command("selectHistory")
@@ -124,7 +152,7 @@ public class ListGroup2ViewModel {
                      ) {
                     for (ChecklistItem ch: checklistItemsChild
                          ) {
-                        if(ch.getId()==resultItem.getItemId()){
+                        if(ch.getName().equals(resultItem.getName())){
                             checklistGroupsModel.addToSelection(ch);
                         }
                     }
@@ -136,5 +164,25 @@ public class ListGroup2ViewModel {
         }
     }
 
+    @Command("convertHistory")
+    @NotifyChange("historyResults")
+    public void convertHistory(@BindingParam("data") Object data){
+        if(data instanceof Integer){
+            int historyId = ((Integer)data).intValue();
+            for (ChecklistHistory history:checklistHistories
+                 ) {
+                if(history.getId()==historyId){
+                    String detail= history.getDetail();
+                    try {
+                        HistoryResult[] results = new Gson().fromJson(detail, HistoryResult[].class);
+                        historyResults = Arrays.asList(results);
+                    }catch (Exception ex){
+                        System.out.println(ex.getMessage());
+                    }
+                    break;
+                }
+            }
+        }
+    }
 
 }
