@@ -5,8 +5,20 @@
     <div id="container" sclass="vertical" apply="org.zkoss.bind.BindComposer"
          viewModel="@id('vm') @init('org.example.navbar.NavigationViewModel')">
         <div>
+
+            <div>
+                <groupbox mold="3d" closable="false">
+                    <vlayout>
+                        <hlayout>
+                            <image src="/resources/image/logo.jpg" width="30%" sclass="rounded"/>
+                        </hlayout>
+                    </vlayout>
+                </groupbox>
+            </div>
+
             <navbar id="navbar" orient="vertical" collapsed="false"
                     onSelect="@command('navigatePage', target=self.selectedItem.attributes['navigationPage'])">
+
                 <nav label="CHECK LIST" iconSclass="z-icon-home"
                      children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
 

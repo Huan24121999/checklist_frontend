@@ -1,28 +1,24 @@
 package org.example.list_group;
 
 import com.google.gson.Gson;
-import org.example.data.FoodData;
-import org.example.data.pojo.Food;
+import lombok.Data;
 import org.example.grouping_model.ChecklistComparator;
-import org.example.grouping_model.FoodComparator;
-import org.example.model.ChecklistHistory;
-import org.example.model.ChecklistItem;
-import org.example.model.HistoryResult;
-import org.example.model.ResultItem;
+import org.example.model.*;
 import org.example.restapi.ChecklistHistoryApi;
 import org.example.restapi.ChecklistItemApi;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
-import org.zkoss.zk.ui.select.annotation.Wire;
-import org.zkoss.zul.Listbox;
+import org.zkoss.zk.ui.util.Notification;
+import org.zkoss.zkmax.ui.util.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+@Data
 public class ListGroup2ViewModel {
 
     private ChecklistGroupsModel checklistGroupsModel;
@@ -33,7 +29,11 @@ public class ListGroup2ViewModel {
 
     private List<HistoryResult> historyResults=new ArrayList<>();
 
-    private final List<ChecklistItem> checklistItemsChild= new ArrayList<>();
+    private HistoryTotal currentHistory= new HistoryTotal();
+
+    private List<ChecklistItem> checklistItemsChild= new ArrayList<>();
+    
+    private boolean visibleHistory =false;
 
     @Init
     public void init() {
@@ -47,27 +47,6 @@ public class ListGroup2ViewModel {
         checklistHistories.addAll(checklistHistoryApi.getAll());
 
     }
-
-    public ChecklistHistoryApi getChecklistHistoryApi() {
-        return checklistHistoryApi;
-    }
-
-    public List<HistoryResult> getHistoryResults() {
-        return historyResults;
-    }
-
-    public List<ChecklistItem> getChecklistItemsChild() {
-        return checklistItemsChild;
-    }
-
-    public ChecklistGroupsModel getChecklistGroupsModel() {
-        return checklistGroupsModel;
-    }
-
-    public List<ChecklistHistory> getChecklistHistories() {
-        return checklistHistories;
-    }
-
     @Command("selectGroup")
     public void selectGroup(@BindingParam("data") Object data) {
         if (data instanceof ChecklistGroupsModel.CheckListGroupInfo) {
@@ -108,7 +87,7 @@ public class ListGroup2ViewModel {
     }
 
     @Command("execute")
-    @NotifyChange("checklistHistories")
+    @NotifyChange({"checklistHistories","historyResults","currentHistory","visibleHistory"})
     public void execute(){
         List<Integer> ids=new ArrayList<>();
         Set<Object> checklistItemList= checklistGroupsModel.getSelection();
@@ -127,51 +106,34 @@ public class ListGroup2ViewModel {
                 ChecklistHistory checklistHistory = checklistItemApi.Execute(ids);
                 System.out.println(checklistHistory);
                 checklistHistories.add(0,checklistHistory);
-                System.out.println("DONE");
+                convertHistory(checklistHistory.getId());
+                Toast.show("Executed. Please view the result.",null,null,2000,true);
             }catch(Exception  ex){
                 System.out.println("LOI ROI");
                 System.out.println(ex.getMessage());
             }
         }
+        else{
+            Toast.show("Please chose at least 1 item","warning",null,2000,true);
+        }
+
     }
 
-    @Command("selectHistory")
-    public void selectHistory(@BindingParam("data")Object data){
-        System.out.println(data);
-        if(data instanceof ChecklistHistory){
-            try {
-                ChecklistHistory checklistHistory = (ChecklistHistory) data;
-                System.out.println(checklistHistory.getDetail());
-                ResultItem[] resultItems = new Gson().fromJson(checklistHistory.getDetail(), ResultItem[].class);
-                System.out.println(resultItems);
-                System.out.println(resultItems.length);
-                List<ResultItem> resultItemList= Arrays.asList(resultItems);
-                System.out.println(checklistGroupsModel);
-                checklistGroupsModel.clearSelection();
-                for (ResultItem resultItem: resultItems
-                     ) {
-                    for (ChecklistItem ch: checklistItemsChild
-                         ) {
-                        if(ch.getName().equals(resultItem.getName())){
-                            checklistGroupsModel.addToSelection(ch);
-                        }
-                    }
-                }
-                System.out.println(checklistGroupsModel.getSelection());
-            }catch (Exception ex){
-                System.out.println(ex.getCause());
-            }
-        }
-    }
 
     @Command("convertHistory")
-    @NotifyChange("historyResults")
+    @NotifyChange({"historyResults","currentHistory","visibleHistory"})
     public void convertHistory(@BindingParam("data") Object data){
+        System.out.println(data);
         if(data instanceof Integer){
+            visibleHistory =true;
             int historyId = ((Integer)data).intValue();
             for (ChecklistHistory history:checklistHistories
                  ) {
                 if(history.getId()==historyId){
+                    String result= history.getResult();
+                    int[] convertedResult= convertResultToNumber(result);
+                    currentHistory.setPassed(convertedResult[0]);
+                    currentHistory.setTotal(convertedResult[1]);
                     String detail= history.getDetail();
                     try {
                         HistoryResult[] results = new Gson().fromJson(detail, HistoryResult[].class);
@@ -185,4 +147,17 @@ public class ListGroup2ViewModel {
         }
     }
 
+    @Command("closeDetailResult")
+    @NotifyChange("visibleHistory")
+    public void closeDetailResult(){
+        visibleHistory=false;
+    }
+
+    public int[] convertResultToNumber(String result){
+        String[] numbers= result.split("/");
+        int[] arrays=new int[2];
+        arrays[0]= Integer.parseInt(numbers[0]);
+        arrays[1] = Integer.parseInt(numbers[1]);
+        return arrays;
+    }
 }

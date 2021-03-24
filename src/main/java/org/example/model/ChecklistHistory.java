@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChecklistHistory {
+public class ChecklistHistory implements Comparable{
 
     private Integer id;
 
@@ -23,4 +23,12 @@ public class ChecklistHistory {
 
     private String username;
 
+    @Override
+    public int compareTo(Object o) {
+        if(o instanceof ChecklistHistory){
+            ChecklistHistory other=(ChecklistHistory) o;
+            return this.result.compareTo(other.result);
+        }
+        return 0;
+    }
 }

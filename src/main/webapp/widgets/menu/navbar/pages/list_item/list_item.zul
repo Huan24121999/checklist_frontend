@@ -1,79 +1,49 @@
+
 <zk xmlns:n="xhtml">
     <n:div apply="org.zkoss.bind.BindComposer"
            viewModel="@id('vm') @init('org.example.list_group.ListGroup2ViewModel')">
         <style>.count { font-weight: bold; font-size: 16px; } .time { font-size: 16px; } .progress{display:none;}
         </style>
-        <zscript>
-            int countNum = 10;
-            void restart() {
-            countNum = 10;
-            pm.value = 0;
-            timer.start();
-            }
-        </zscript>
-        <groupbox mold="3d" closable="false">
-            <caption label="Timer Demo">
 
-            </caption>
-            <vlayout spacing="30px">
-
-                <label id="now" sclass="time"/>
-                <label id="count" sclass="count"/>
-                <progressmeter id="pm" value="0" width="300px" sclass="progress"/>
-                <hlayout>
-                    <button label="Close All" onClick="@command('closeAll')" width="100px"/>
-                    <button label="Expand All" onClick="@command('expandAll')" width="100px"/>
-                    <button label="Refresh" onClick="@command('refresh')" width="100px"/>
-                    <button label="Execute" onClick="@command('execute')" width="100px"/>
-                </hlayout>
-            </vlayout>
-        </groupbox>
-        <timer id="timer" delay="1000" repeats="true">
-            <attribute name="onTimer">
-                now.setValue("Time ：" + new Date().toString());
-                if (countNum == 0) {
-                timer.stop();
-                return;
-                }
-                count.value = "Count : " + --countNum + "";
-                pm.value = pm.value + 10;
-            </attribute>
-        </timer>
-        <listbox id="listbox" model="@load(vm.checklistGroupsModel)" height="400px" checkmark="true"
-                 onSelect="@command('selectGroup', data=event.reference.value)" multiple="true"
-                 itemRenderer="org.example.renderer.CheckListRenderer">
-            <!-- Make Grouping item selectable-->
-            <custom-attributes id="group_select" org.zkoss.zul.listbox.groupSelect="true"/>
-            <listhead>
-                <listheader width="150px" sort="auto(ChecklistGroup.name)" label="Category"/>
-                <listheader width="200px" sort="auto(Name)" label="Name"/>
-                <listheader hflex="400px" sort="auto(Description)" label="Description"/>
-                <listheader hflex="200px" sort="auto(Server.name)" align="center" label="Server Check"/>
-            </listhead>
-        </listbox>
+        <!--        table for checklist item-->
+        <div visible="@load(not vm.visibleHistory)" sclass="card ">
+            <groupbox mold="3d" closable="false">
+                <vlayout>
+                    <hlayout>
+                        <button label="Close All" sclass="btn btn-primary" onClick="@command('closeAll')" />
+                        <button label="Expand All" sclass="btn btn-primary" onClick="@command('expandAll')"/>
+                        <button label="Refresh" sclass="btn btn-primary" onClick="@command('refresh')"/>
+                        <button label="Execute" sclass="btn btn-success" onClick="@command('execute')" />
+                    </hlayout>
+                </vlayout>
+            </groupbox>
+            <listbox id="listbox" model="@load(vm.checklistGroupsModel)" height="400px" checkmark="true"
+                     onSelect="@command('selectGroup', data=event.reference.value)" multiple="true"
+                     itemRenderer="org.example.renderer.CheckListRenderer">
+                <!-- Make Grouping item selectable-->
+                <custom-attributes id="group_select" org.zkoss.zul.listbox.groupSelect="true"/>
+                <listhead>
+                    <listheader sort="auto(ChecklistGroup.name)" label="Category"/>
+                    <listheader sort="auto(Name)" label="Name"/>
+                    <listheader sort="auto(Description)" label="Description"/>
+                    <listheader sort="auto(Server.name)" align="center" label="Server Check"/>
+                </listhead>
+            </listbox>
+        </div>
 
 
-        <grid id="grid"
-              model="@bind(vm.checklistHistories)"
-              mold="paging" pageSize="5">
-            <columns>
-                <column hflex="1" label="Start #" align="left"/>
-                <column hflex="2" label="End " align="center"/>
-                <column hflex="2" label="Result " align="center"/>
-                <column hflex="1" label="User" align="center"/>
-            </columns>
-            <template name="model">
-                <row onClick="@command('convertHistory', data=each.id)">
-                    <label value="@load(each.startTime)"/>
-                    <label value="@load(each.endTime)"/>
-                    <label value="@load(each.result)"/>
-                    <label value="@load(each.id)"/>
-                </row>
-            </template>
-        </grid>
+        <!--        table for each element of execute result-->
+        <div id="history_view" class="card" visible="@load(vm.visibleHistory)">
+            <div class="card-header border-transparent">
+                <n:h3 class="card-title">Executed Result</n:h3>
 
-        <n:div class="card">
-            <n:div class="card-header border-transparent">
+                <div class="card-tools">
+                    <n:button type="button" class="btn btn-tool btn-danger" onClick="@command('closeDetailResult')" >
+                        Close
+                    </n:button>
+                </div>
+            </div>
+            <n:div class="card-header border-transparent" model="@bind(vm.currentHistory)">
                 <n:div class="row">
                     <n:div class="col-12 col-sm-6 col-md-3">
                         <n:div class="info-box">
@@ -84,15 +54,12 @@
                             <n:div class="info-box-content">
                                 <n:span class="info-box-text">Total</n:span>
                                 <n:span class="info-box-number">
-                                    15
+                                    <label value="@load(vm.currentHistory.total)"></label>
                                     <n:small>test case</n:small>
                                 </n:span>
                             </n:div>
-                            <!-- /.info-box-content -->
                         </n:div>
-                        <!-- /.info-box -->
                     </n:div>
-                    <!-- /.col -->
                     <n:div class="col-12 col-sm-6 col-md-3">
                         <n:div class="info-box mb-3">
                             <n:span class="info-box-icon bg-danger elevation-1">
@@ -101,17 +68,13 @@
 
                             <n:div class="info-box-content">
                                 <n:span class="info-box-text">Failed</n:span>
-                                <n:span class="info-box-number">10
+                                <n:span class="info-box-number">
+                                    <label value="@load(vm.currentHistory.total- vm.currentHistory.passed)"></label>
                                     <n:small>test case</n:small>
                                 </n:span>
                             </n:div>
-                            <!-- /.info-box-content -->
                         </n:div>
-                        <!-- /.info-box -->
                     </n:div>
-                    <!-- /.col -->
-
-                    <!-- fix for small devices only -->
                     <n:div class="clearfix hidden-md-up"></n:div>
 
                     <n:div class="col-12 col-sm-6 col-md-3">
@@ -122,15 +85,13 @@
 
                             <n:div class="info-box-content">
                                 <n:span class="info-box-text">Passed</n:span>
-                                <n:span class="info-box-number">5
+                                <n:span class="info-box-number">
+                                    <label value="@load(vm.currentHistory.passed)"></label>
                                     <n:small>test case</n:small>
                                 </n:span>
                             </n:div>
-                            <!-- /.info-box-content -->
                         </n:div>
-                        <!-- /.info-box -->
                     </n:div>
-                    <!-- /.col -->
                     <n:div class="col-12 col-sm-6 col-md-3">
                         <n:div class="info-box mb-3">
                             <n:span class="info-box-icon bg-warning elevation-1">
@@ -139,91 +100,91 @@
 
                             <n:div class="info-box-content">
                                 <n:span class="info-box-text">Reach Percent</n:span>
-                                <n:span class="info-box-number">33
+                                <n:span class="info-box-number">
+                                    <label value="@load(Math.round(vm.currentHistory.passed*100/vm.currentHistory.total))"></label>
                                     <n:small>%</n:small>
                                 </n:span>
                             </n:div>
-                            <!-- /.info-box-content -->
                         </n:div>
-                        <!-- /.info-box -->
                     </n:div>
-                    <!-- /.col -->
                 </n:div>
             </n:div>
-            <!-- /.card-header -->
+
             <n:div class="card-body p-0">
                 <n:div class="table-responsive">
-                    <n:table class="table m-0">
-                        <n:thead>
-                            <n:tr>
-                                <n:th>Type Check</n:th>
-                                <n:th>Name</n:th>
-                                <n:th>Status</n:th>
-                                <n:th>Description</n:th>
-                            </n:tr>
-                        </n:thead>
-                        <n:tbody model="@bind(vm.checklistHistories)">
-
-                            <template name="model">
-                                <n:tr>
-                                    <n:td>
-                                        <n:a href="pages/examples/invoice.html" value="@load(each.startTime)"></n:a>
-                                    </n:td>
-                                    <n:td>Call of Duty IV</n:td>
-                                    <n:td>
-                                        <n:span class="badge badge-danger" value="@load(each.startTime)"></n:span>
-                                    </n:td>
-                                    <n:td>
-                                        <n:div class="sparkbar" data-color="#00a65a" data-height="20">
-                                            <n:b value="@load(each.startTime)">
-                                                OUTCOME: Error: java.net.NoRouteToHostException: No route to host (Host
-                                                unreachable)
-                                            </n:b>
-                                            <n:div value="@load(each.startTime)">
-                                                REQUIRED:12
-                                            </n:div>
-                                        </n:div>
-                                    </n:td>
-                                </n:tr>
-                            </template>
-
-                            <grid>
-                                <columns>
-                                    <column label="Type Check	" />
-                                    <column label="Name" />
-                                    <column label="Status" />
-                                    <column label="Description" />
-                                </columns>
-                                <rows model="@bind(vm.historyResults)">
-                                    <forEach items="@load(vm.historyResults)" >
-                                        <row>
-                                            <label value="@load(each.name)">A</label>
-                                            <cell>
-                                                <label value="@load(each.groupCheck)">B</label>
-                                            </cell>
-                                            <cell>
-                                                <label value="@load(each.isPassed)">B</label>
-                                            </cell>
-                                            <cell>
-                                                <label value="@load(each.result)">B</label>
-                                                <label value="@load(each.requiredResult)">B</label>
-                                            </cell>
-                                        </row>
-                                    </forEach>
-                                </rows>
-                            </grid>
-
-                        </n:tbody>
-                    </n:table>
+                    <grid id="grid-history" model="@bind(vm.historyResults)">
+                        <columns>
+                            <column sort="auto" label="Type Check	"/>
+                            <column sort="auto" label="Name"/>
+                            <column sort="auto" label="Status"/>
+                            <column label="Description"/>
+                        </columns>
+                        <template name="model">
+                            <row>
+                                <cell>
+                                    <label value="@load(each.groupCheck)" sclass="text-info"></label>
+                                </cell>
+                                <cell>
+                                    <label value="@load(each.name)"></label>
+                                </cell>
+                                <cell>
+                                    <label if="${each.passed==true}" sclass="badge badge-success">
+                                        Passed
+                                    </label>
+                                    <label if="${each.passed!=true}" value="Failed" sclass="badge badge-danger">
+                                        Failed
+                                    </label>
+                                </cell>
+                                <cell>
+                                    <label value="@load(each.result)"></label>
+                                    <div>
+                                        <n:b>Required:
+                                            <label value="@load(each.requiredResult)"></label>
+                                        </n:b>
+                                    </div>
+                                </cell>
+                            </row>
+                        </template>
+                    </grid>
                 </n:div>
                 <!-- /.table-responsive -->
             </n:div>
-            <!-- /.card-body -->
             <n:div class="card-footer clearfix">
-                <n:a href="javascript:void(0)" class="btn btn-sm btn-info float-left">Total: 15 test case</n:a>
+                <div class="btn btn-sm btn-info float-left ">Total
+                    <label value="@load(vm.currentHistory.total)"></label>
+                </div>
             </n:div>
-            <!-- /.card-footer -->
-        </n:div>
-        <!-- /.card -->
+        </div>
+
+
+        <div>
+            <groupbox mold="3d" closable="false">
+                <vlayout>
+                    <hlayout>
+                        <n:h2>checklist history</n:h2>
+                    </hlayout>
+                </vlayout>
+            </groupbox>
+            <!--        table for checklist history-->
+            <grid id="grid"
+                  model="@bind(vm.checklistHistories)"
+                  mold="paging" pageSize="5">
+                <columns>
+                    <column hflex="1" sort="auto" label="Start #" align="left"/>
+                    <column hflex="2" sort="auto" label="End " align="center"/>
+                    <column hflex="2" sort="auto" label="Result " align="center"/>
+                    <column hflex="1" sort="auto" label="User" align="center"/>
+                </columns>
+                <template name="model">
+                    <row onClick="@command('convertHistory', data=each.id)" sclass="history">
+                        <label value="@load(each.startTime)"/>
+                        <label value="@load(each.endTime)"/>
+                        <label value="@load(each.result)"/>
+                        <label value="@load(each.username)"/>
+                    </row>
+                </template>
+            </grid>
+        </div>
     </n:div>
+
 </zk>
