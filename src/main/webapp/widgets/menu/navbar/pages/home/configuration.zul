@@ -1,0 +1,127 @@
+<!--<?link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"?>-->
+<!--    <?script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous" ?>-->
+<zk xmlns:n="xhtml">
+
+    <panel style="margin-bottom:10px"
+           title="Checklist Item Configuration" border="normal" closable="false"
+           collapsible="true">
+        <caption iconSclass="z-icon-home"/>
+        <panelchildren>
+            <div apply="org.zkoss.bind.BindComposer"
+                 viewModel="@id('vm') @init('org.example.list_group.ListGroup2ViewModel')">
+                <!--        table for checklist item-->
+                <div visible="@load(not vm.visibleHistory)" sclass="card ">
+                    <groupbox mold="3d" closable="false">
+                        <vlayout>
+                            <hlayout>
+                                <button label="Close All" sclass="btn btn-primary" onClick="@command('closeAll')"/>
+                                <button label="Expand All" sclass="btn btn-primary" onClick="@command('expandAll')"/>
+                                <button label="Refresh" sclass="btn btn-primary" onClick="@command('refresh')"/>
+                                <button label="Delete" sclass="btn btn-danger" onClick="@command('refresh')"/>
+                                <button label="Add +" sclass="btn btn-success" onClick="@command('refresh')"/>
+                            </hlayout>
+                            <hlayout></hlayout>
+                        </vlayout>
+                    </groupbox>
+                    <listbox id="listbox" model="@load(vm.checklistGroupsModel)" height="400px" checkmark="true"
+                             onSelect="@command('selectGroup', data=event.reference.value)" multiple="true"
+                             itemRenderer="org.example.renderer.CheckListRenderer">
+                        <!-- Make Grouping item selectable-->
+                        <custom-attributes id="group_select" org.zkoss.zul.listbox.groupSelect="true"/>
+                        <listhead>
+                            <listheader sort="auto(ChecklistGroup.name)" label="Category"/>
+                            <listheader sort="auto(Name)" label="Name"/>
+                            <listheader sort="auto(Description)" label="Description"/>
+                            <listheader sort="auto(Server.name)" align="center" label="Server Check"/>
+                        </listhead>
+                    </listbox>
+                </div>
+            </div>
+        </panelchildren>
+    </panel>
+
+    <panel style="margin-bottom:10px"
+           title="Checklist Group Configuration" border="normal" closable="false"
+           collapsible="true">
+        <caption iconSclass="z-icon-home"/>
+        <panelchildren>
+            <div apply="org.zkoss.bind.BindComposer"
+                 viewModel="@id('vm') @init('org.example.list_group.ListGroup2ViewModel')">
+                <!--        table for checklist item-->
+                <div visible="@load(not vm.visibleHistory)" sclass="card ">
+                    <groupbox mold="3d" closable="false">
+                        <vlayout>
+                            <hlayout>
+                                <button label="Close All" sclass="btn btn-primary" onClick="@command('closeAll')"/>
+                                <button label="Expand All" sclass="btn btn-primary" onClick="@command('expandAll')"/>
+                                <button label="Refresh" sclass="btn btn-primary" onClick="@command('refresh')"/>
+                                <button label="Delete" sclass="btn btn-danger" onClick="@command('refresh')"/>
+                                <button label="Add +" sclass="btn btn-success" onClick="@command('refresh')"/>
+                            </hlayout>
+                            <hlayout></hlayout>
+                        </vlayout>
+                    </groupbox>
+                    <listbox model="@load(vm.checklistGroupsModel)" height="400px" checkmark="true"
+                             onSelect="@command('selectGroup', data=event.reference.value)" multiple="true"
+                             itemRenderer="org.example.renderer.CheckListRenderer">
+                        <!-- Make Grouping item selectable-->
+                        <custom-attributes org.zkoss.zul.listbox.groupSelect="true"/>
+                        <listhead>
+                            <listheader sort="auto(ChecklistGroup.name)" label="Category"/>
+                            <listheader sort="auto(Name)" label="Name"/>
+                            <listheader sort="auto(Description)" label="Description"/>
+                            <listheader sort="auto(Server.name)" align="center" label="Server Check"/>
+                        </listhead>
+                    </listbox>
+                </div>
+            </div>
+        </panelchildren>
+    </panel>
+
+    <panel style="margin-bottom:10px"
+           title="Server Information Configuration" border="normal" closable="false"
+           collapsible="true">
+        <caption iconSclass="z-icon-home"/>
+        <panelchildren>
+            <div apply="org.zkoss.bind.BindComposer"
+                 viewModel="@id('vm') @init('org.example.viewmodel.ServerConfigurationViewModel')">
+                <!--        table for checklist item-->
+                <div sclass="card ">
+                    <groupbox mold="3d" closable="false">
+                        <vlayout>
+                            <hlayout>
+                                <button label="Delete" sclass="btn btn-danger" onClick="@command('refresh')"/>
+                                <button label="Add +" sclass="btn btn-success" onClick="@command('refresh')"/>
+                                <button label="show +" sclass="btn btn-success" onClick="@command('show')"/>
+                            </hlayout>
+                            <hlayout></hlayout>
+                        </vlayout>
+                    </groupbox>
+                    <listbox checkmark="true" multiple="true" model="@load(vm.serverInfos)" selectedItems="@bind(vm.selectedServers)">
+                        <listhead>
+                            <listheader label="Name"/>
+                            <listheader label="Ip Address"/>
+                            <listheader label="Username"/>
+                            <listheader align="center" label="Password"/>
+                            <listheader align="center" label="Edit"/>
+                        </listhead>
+                        <template name="model" var="server">
+                            <listitem>
+                                <listcell label="@load(server.name)"></listcell>
+                                <listcell label="@load(server.ipAddress)"></listcell>
+                                <listcell label="@load(server.username)"></listcell>
+                                <listcell label="@load(server.password)"></listcell>
+                                <listcell>
+                                    <div sclass="btn btn-outline-primary" onClick="@command('edit', data=server.id)">
+                                        Edit
+                                    </div>
+                                </listcell>
+                            </listitem>
+                        </template>
+                    </listbox>
+
+                </div>
+            </div>
+        </panelchildren>
+    </panel>
+</zk>

@@ -18,6 +18,7 @@ org\example\ecommerce\dao\Type.class
 org\example\viewmodel\PagingViewModel.class
 org\example\ecommerce\converter\TypeIconConverter$1.class
 org\example\ecommerce\converter\IntColorConverter.class
+org\example\viewmodel\ServerConfigurationViewModel.class
 org\example\list_group\ListGroup2ViewModel.class
 org\example\restapi\ChecklistHistoryApi.class
 org\example\navbar\NavigationViewModel$1.class

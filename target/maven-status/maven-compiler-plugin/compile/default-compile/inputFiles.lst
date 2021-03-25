@@ -15,6 +15,7 @@ D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\ecommerce\Stat
 D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\model\HistoryTotal.java
 D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\ecommerce\SaleVM.java
 D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\grouping_model\ChecklistFilter.java
+D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\viewmodel\ServerConfigurationViewModel.java
 D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\restapi\BaseConfig.java
 D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\list_group\FoodGroupsModel.java
 D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\ecommerce\converter\TypeColorConverter.java
@@ -47,6 +48,7 @@ D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\viewmodel\Chec
 D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\menu\navigation\Menu.java
 D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\model\ChecklistItem.java
 D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\menu\navigation\NavigationMdel.java
+D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\restapi\ChecklistGroupApi.java
 D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\ecommerce\RevenueVM.java
 D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\list_group\ListGroupViewModel.java
 D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\ecommerce\dao\Product.java
@@ -57,5 +59,7 @@ D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\data\FoodData.
 D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\model\ResultItem.java
 D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\viewmodel\HistoryViewModel.java
 D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\data\pojo\Food.java
+D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\restapi\ServerApi.java
 D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\renderer\CheckListRenderer.java
 D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\ecommerce\ProductImportVM.java
+D:\Huannt14\Exercise\checklist_frontend\src\main\java\org\example\viewmodel\ConfigurationViewModel.java

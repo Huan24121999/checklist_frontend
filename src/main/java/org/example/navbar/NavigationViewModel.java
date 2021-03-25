@@ -36,8 +36,11 @@ public class NavigationViewModel {
 	private void initPageMap() {
 		pageMap = new LinkedHashMap<String, Map<String, NavigationPage>>();
 		
-		addPage("CHECK LIST", "Check", "/list_item/list_item.zul");
-		addPage("CHECK LIST", "Configuration", "/home/about_us.zul");
+		addPage("CHECK LIST", "Execute Checklist", "/list_item/list_item.zul");
+		addPage("CHECK LIST", "Test Case Config", "/home/about_us.zul");
+		addPage("CHECK LIST", "Server Config", "/home/about_us.zul");
+		addPage("CHECK LIST", "Group Config", "/home/about_us.zul");
+		addPage("CHECK LIST", "Configuration", "/home/configuration.zul");
 
 		addPage("HELP", "Active Members", "/customers/customers.zul", "active");
 	}

@@ -2,9 +2,6 @@
 <zk xmlns:n="xhtml">
     <n:div apply="org.zkoss.bind.BindComposer"
            viewModel="@id('vm') @init('org.example.list_group.ListGroup2ViewModel')">
-        <style>.count { font-weight: bold; font-size: 16px; } .time { font-size: 16px; } .progress{display:none;}
-        </style>
-
         <!--        table for checklist item-->
         <div visible="@load(not vm.visibleHistory)" sclass="card ">
             <groupbox mold="3d" closable="false">
