@@ -10,6 +10,7 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.Notification;
 import org.zkoss.zkmax.ui.util.Toast;
 
@@ -20,12 +21,11 @@ import java.util.Set;
 
 @Data
 public class ListGroup2ViewModel {
+    private ChecklistHistoryApi checklistHistoryApi= ChecklistHistoryApi.getInstance();
 
     private ChecklistGroupsModel checklistGroupsModel;
 
     private List<ChecklistHistory> checklistHistories= new ArrayList<>();
-
-    private ChecklistHistoryApi checklistHistoryApi= ChecklistHistoryApi.getInstance();
 
     private List<HistoryResult> historyResults=new ArrayList<>();
 
@@ -34,6 +34,10 @@ public class ListGroup2ViewModel {
     private List<ChecklistItem> checklistItemsChild= new ArrayList<>();
     
     private boolean visibleHistory =false;
+
+    private boolean visibleChecklist=true;
+
+    private boolean isCloseGroup=false;
 
     @Init
     public void init() {
@@ -70,24 +74,60 @@ public class ListGroup2ViewModel {
         checklistGroupsModel.clearSelection();
     }
 
-    @Command("closeAll")
+    @Command("toggleGroup")
     public void closeAll() {
-        int length = checklistGroupsModel.getGroupCount();
-        for (int i = 0; i < length; i++) {
-            checklistGroupsModel.setClose(i,true);
+        if(isCloseGroup){
+            isCloseGroup=false;
+            int length = checklistGroupsModel.getGroupCount();
+            for (int i = 0; i < length; i++) {
+                checklistGroupsModel.setClose(i,false);
+            }
+        }
+        else{
+            isCloseGroup=true;
+            int length = checklistGroupsModel.getGroupCount();
+            for (int i = 0; i < length; i++) {
+                checklistGroupsModel.setClose(i,true);
+            }
+        }
+
+    }
+
+    @Command("selectGroupName")
+    @NotifyChange("visibleChecklist")
+    public void selectGroupName(@BindingParam("data") Object object){
+        if(object instanceof String){
+            checklistGroupsModel.clearSelection();
+            for (ChecklistItem ch:checklistItemsChild
+                 ) {
+                Clients.scrollTo(0,0);
+                visibleChecklist=true;
+                if(ch.getChecklistGroup().getName().equals(object)){
+                    checklistGroupsModel.addToSelection(ch);
+                }
+            }
         }
     }
 
-    @Command("expandAll")
-    public void expandAll() {
-        int length = checklistGroupsModel.getGroupCount();
-        for (int i = 0; i < length; i++) {
-            checklistGroupsModel.setClose(i,false);
+    @Command("selectItem")
+    @NotifyChange("visibleChecklist")
+    public void selectItem(@BindingParam("data")Object object){
+        if(object instanceof String){
+            for (ChecklistItem ch:checklistItemsChild
+                 ) {
+                Clients.scrollTo(0,0);
+                visibleChecklist=true;
+                if(ch.getName().equals(object)){
+                    checklistGroupsModel.clearSelection();
+                    checklistGroupsModel.addToSelection(ch);
+                    break;
+                }
+            }
         }
     }
 
     @Command("execute")
-    @NotifyChange({"checklistHistories","historyResults","currentHistory","visibleHistory"})
+    @NotifyChange({"checklistHistories","historyResults","currentHistory","visibleHistory","visibleChecklist"})
     public void execute(){
         List<Integer> ids=new ArrayList<>();
         Set<Object> checklistItemList= checklistGroupsModel.getSelection();
@@ -121,11 +161,13 @@ public class ListGroup2ViewModel {
 
 
     @Command("convertHistory")
-    @NotifyChange({"historyResults","currentHistory","visibleHistory"})
+    @NotifyChange({"historyResults","currentHistory","visibleHistory","visibleChecklist"})
     public void convertHistory(@BindingParam("data") Object data){
         System.out.println(data);
         if(data instanceof Integer){
+            Clients.scrollTo(0,0);
             visibleHistory =true;
+            visibleChecklist=false;
             int historyId = ((Integer)data).intValue();
             for (ChecklistHistory history:checklistHistories
                  ) {

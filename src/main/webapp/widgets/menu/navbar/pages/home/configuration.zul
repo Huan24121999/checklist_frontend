@@ -90,19 +90,19 @@
                     <groupbox mold="3d" closable="false">
                         <vlayout>
                             <hlayout>
-                                <button label="Delete" sclass="btn btn-danger" onClick="@command('refresh')"/>
+                                <button label="Delete" sclass="btn btn-danger" onClick="@command('delete')"/>
                                 <button label="Add +" sclass="btn btn-success" onClick="@command('refresh')"/>
                                 <button label="show +" sclass="btn btn-success" onClick="@command('show')"/>
                             </hlayout>
                             <hlayout></hlayout>
                         </vlayout>
                     </groupbox>
-                    <listbox checkmark="true" multiple="true" model="@load(vm.serverInfos)" selectedItems="@bind(vm.selectedServers)">
+                    <listbox checkmark="true"  model="@load(vm.serverInfos)" selectedItems="@bind(vm.selectedServers)">
                         <listhead>
                             <listheader label="Name"/>
                             <listheader label="Ip Address"/>
                             <listheader label="Username"/>
-                            <listheader align="center" label="Password"/>
+                            <listheader label="Password"/>
                             <listheader align="center" label="Edit"/>
                         </listhead>
                         <template name="model" var="server">
@@ -110,7 +110,7 @@
                                 <listcell label="@load(server.name)"></listcell>
                                 <listcell label="@load(server.ipAddress)"></listcell>
                                 <listcell label="@load(server.username)"></listcell>
-                                <listcell label="@load(server.password)"></listcell>
+                                <listcell label="@load(server.password)" ></listcell>
                                 <listcell>
                                     <div sclass="btn btn-outline-primary" onClick="@command('edit', data=server.id)">
                                         Edit
@@ -124,4 +124,6 @@
             </div>
         </panelchildren>
     </panel>
+
+
 </zk>

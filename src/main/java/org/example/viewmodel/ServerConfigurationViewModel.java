@@ -2,9 +2,12 @@ package org.example.viewmodel;
 
 import lombok.Data;
 import org.example.model.ServerInfo;
+import org.example.restapi.ChecklistItemApi;
 import org.example.restapi.ServerApi;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zul.Window;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +16,12 @@ import java.util.List;
 public class ServerConfigurationViewModel {
     private static final ServerApi serverApi= ServerApi.getInstance();
 
+    private static final ChecklistItemApi checklistItemApi = ChecklistItemApi.getInstance();
+
     private List<ServerInfo> serverInfos= new ArrayList<>();
 
     private List<ServerInfo> selectedServers= new ArrayList<>();
 
-    private ServerInfo selectedServer=null;
 
     @Init
     public void init(){
@@ -34,11 +38,16 @@ public class ServerConfigurationViewModel {
             System.out.println(data.toString());
         }
         System.out.println(data.toString());
-        System.out.println(selectedServer);
     }
     @Command("show")
     public void show(){
         System.out.println(selectedServers);
     }
 
+    @Command("delete")
+    public void delete(Object data){
+        Window window = (Window) Executions.createComponents(
+                "/widgets/menu/navbar/pages/modal/delete_server.zul", null, null);
+        window.doModal();
+    }
 }

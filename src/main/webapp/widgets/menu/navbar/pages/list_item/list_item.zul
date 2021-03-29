@@ -1,41 +1,48 @@
-
 <zk xmlns:n="xhtml">
     <n:div apply="org.zkoss.bind.BindComposer"
            viewModel="@id('vm') @init('org.example.list_group.ListGroup2ViewModel')">
-        <!--        table for checklist item-->
-        <div visible="@load(not vm.visibleHistory)" sclass="card ">
-            <groupbox mold="3d" closable="false">
-                <vlayout>
-                    <hlayout>
-                        <button label="Close All" sclass="btn btn-primary" onClick="@command('closeAll')" />
-                        <button label="Expand All" sclass="btn btn-primary" onClick="@command('expandAll')"/>
-                        <button label="Refresh" sclass="btn btn-primary" onClick="@command('refresh')"/>
-                        <button label="Execute" sclass="btn btn-success" onClick="@command('execute')" />
-                    </hlayout>
-                </vlayout>
-            </groupbox>
-            <listbox id="listbox" model="@load(vm.checklistGroupsModel)" height="400px" checkmark="true"
-                     onSelect="@command('selectGroup', data=event.reference.value)" multiple="true"
-                     itemRenderer="org.example.renderer.CheckListRenderer">
-                <!-- Make Grouping item selectable-->
-                <custom-attributes id="group_select" org.zkoss.zul.listbox.groupSelect="true"/>
-                <listhead>
-                    <listheader sort="auto(ChecklistGroup.name)" label="Category"/>
-                    <listheader sort="auto(Name)" label="Name"/>
-                    <listheader sort="auto(Description)" label="Description"/>
-                    <listheader sort="auto(Server.name)" align="center" label="Server Check"/>
-                </listhead>
-            </listbox>
-        </div>
+
+<!--        table for display checklist items-->
+        <panel style="margin-bottom:10px"
+               title="Checklist Items" border="normal"
+               collapsible="true" open="@load(vm.visibleChecklist)">
+            <caption iconSclass="z-icon-home"/>
+            <panelchildren>
+                <div sclass="card ">
+                    <groupbox mold="3d" closable="false">
+                        <vlayout>
+                            <hlayout>
+                                <button label="Close/ Expand" sclass="btn btn-primary" onClick="@command('toggleGroup')"/>
+                                <button label="Refresh" sclass="btn btn-primary" onClick="@command('refresh')"/>
+                                <button label="Execute" sclass="btn btn-success" onClick="@command('execute')"/>
+                            </hlayout>
+                        </vlayout>
+                    </groupbox>
+                    <listbox id="listbox" model="@load(vm.checklistGroupsModel)" height="400px" checkmark="true"
+                             onSelect="@command('selectGroup', data=event.reference.value)" multiple="true"
+                             itemRenderer="org.example.renderer.CheckListRenderer">
+                        <!-- Make Grouping item selectable-->
+                        <custom-attributes id="group_select" org.zkoss.zul.listbox.groupSelect="true"/>
+                        <listhead>
+                            <listheader sort="auto(ChecklistGroup.name)" label="Category"/>
+                            <listheader sort="auto(Name)" label="Name"/>
+                            <listheader sort="auto(Description)" label="Description"/>
+                            <listheader sort="auto(Server.name)" align="center" label="Server Check"/>
+                        </listhead>
+                    </listbox>
+                </div>
+            </panelchildren>
+        </panel>
 
 
-        <!--        table for each element of execute result-->
+<!--        table for display executed result-->
         <div id="history_view" class="card" visible="@load(vm.visibleHistory)">
             <div class="card-header border-transparent">
-                <n:h3 class="card-title">Executed Result</n:h3>
+                <n:h3 class="card-title">EXECUTED RESULT</n:h3>
 
                 <div class="card-tools">
-                    <n:button type="button" class="btn btn-tool btn-danger" onClick="@command('closeDetailResult')" >
+                    <n:button type="button" class="btn btn-tool btn-danger"
+                              onClick="@command('closeDetailResult')">
                         Close
                     </n:button>
                 </div>
@@ -118,11 +125,11 @@
                         </columns>
                         <template name="model">
                             <row>
-                                <cell>
-                                    <label value="@load(each.groupCheck)" sclass="text-info"></label>
+                                <cell onClick="@command('selectGroupName',data=each.groupCheck)">
+                                    <label value="@load(each.groupCheck)" sclass="text-info"  style="cursor:hand;cursor:pointer"></label>
                                 </cell>
-                                <cell>
-                                    <label value="@load(each.name)"></label>
+                                <cell onClick="@command('selectItem',data=each.name)">
+                                    <label value="@load(each.name)" sclass="text-info" style="cursor:hand;cursor:pointer"></label>
                                 </cell>
                                 <cell>
                                     <label if="${each.passed==true}" sclass="badge badge-success">
@@ -154,34 +161,35 @@
         </div>
 
 
-        <div>
-            <groupbox mold="3d" closable="false">
-                <vlayout>
-                    <hlayout>
-                        <n:h2>checklist history</n:h2>
-                    </hlayout>
-                </vlayout>
-            </groupbox>
-            <!--        table for checklist history-->
-            <grid id="grid"
-                  model="@bind(vm.checklistHistories)"
-                  mold="paging" pageSize="5">
-                <columns>
-                    <column hflex="1" sort="auto" label="Start #" align="left"/>
-                    <column hflex="2" sort="auto" label="End " align="center"/>
-                    <column hflex="2" sort="auto" label="Result " align="center"/>
-                    <column hflex="1" sort="auto" label="User" align="center"/>
-                </columns>
-                <template name="model">
-                    <row onClick="@command('convertHistory', data=each.id)" sclass="history">
-                        <label value="@load(each.startTime)"/>
-                        <label value="@load(each.endTime)"/>
-                        <label value="@load(each.result)"/>
-                        <label value="@load(each.username)"/>
-                    </row>
-                </template>
-            </grid>
-        </div>
+<!--        table for display history checklist-->
+        <panel style="margin-bottom:10px"
+               title="Checklist History" border="normal" closable="false"
+               collapsible="true">
+            <caption iconSclass="z-icon-home"/>
+            <panelchildren>
+                <div>
+                    <!--        table for checklist history-->
+                    <grid id="grid"
+                          model="@bind(vm.checklistHistories)"
+                          mold="paging" pageSize="5">
+                        <columns>
+                            <column hflex="2" sort="auto" label="Start #" align="left"/>
+                            <column hflex="2" sort="auto" label="End " align="left"/>
+                            <column hflex="2" sort="auto" label="Result " align="center"/>
+                            <column hflex="1" sort="auto" label="User" align="center"/>
+                        </columns>
+                        <template name="model">
+                            <row onClick="@command('convertHistory', data=each.id)" sclass="history" style="cursor:hand;cursor:pointer">
+                                <label value="@load(each.startTime)"/>
+                                <label value="@load(each.endTime)"/>
+                                <label value="@load(each.result)"/>
+                                <label value="@load(each.username)"/>
+                            </row>
+                        </template>
+                    </grid>
+                </div>
+            </panelchildren>
+        </panel>
     </n:div>
 
 </zk>
