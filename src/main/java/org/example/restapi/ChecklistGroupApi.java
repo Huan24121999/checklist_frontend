@@ -2,6 +2,8 @@ package org.example.restapi;
 
 import com.google.gson.Gson;
 import org.example.model.ChecklistGroup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
@@ -11,7 +13,7 @@ import javax.ws.rs.core.Response;
 import java.util.*;
 
 public class ChecklistGroupApi {
-//    private static final Logger logger= LoggerFactory.getLogger(ChecklistGroupApi.class);
+    private static final Logger logger= LoggerFactory.getLogger(ChecklistGroupApi.class);
     private static ChecklistGroupApi checklistGroupApi= new ChecklistGroupApi();
 
     public static ChecklistGroupApi getInstance(){
@@ -29,7 +31,7 @@ public class ChecklistGroupApi {
             return Arrays.asList(checklistGroups);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-//            logger.error(ex.getMessage());
+            logger.error(ex.getMessage());
             return null;
         }
     }
@@ -45,7 +47,7 @@ public class ChecklistGroupApi {
             return checklistGroupResult;
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-//            logger.error(ex.getMessage());
+            logger.error(ex.getMessage());
             return null;
         }
     }
@@ -61,7 +63,7 @@ public class ChecklistGroupApi {
             return checklistGroupResult;
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-//            logger.error(ex.getMessage());
+            logger.error(ex.getMessage());
             return null;
         }
     }
@@ -77,7 +79,7 @@ public class ChecklistGroupApi {
             return false;
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-//            logger.error(ex.getMessage());
+            logger.error(ex.getMessage());
             return false;
         }
     }

@@ -1,9 +1,8 @@
 <?link rel="stylesheet" href="resources/css/adminlte.min.css" ?>
+<?link rel="stylesheet" href="resources/css/style.css" ?>
 <zk xmlns:n="native">
-    <style src="/widgets/menu/navbar/style.css"/>
-
     <div id="container" sclass="vertical" apply="org.zkoss.bind.BindComposer"
-         viewModel="@id('vm') @init('org.example.navbar.NavigationViewModel')">
+         viewModel="@id('vm') @init('org.example.viewmodel.NavigationViewModel')">
         <div>
 
             <div>

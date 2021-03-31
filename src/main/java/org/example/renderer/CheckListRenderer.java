@@ -1,6 +1,7 @@
 package org.example.renderer;
 
-import org.example.list_group.ChecklistGroupsModel;
+import org.example.viewmodel.ChecklistGroupsModel;
+import org.example.model.CheckType;
 import org.example.model.ChecklistItem;
 import org.zkoss.zul.*;
 
@@ -8,15 +9,10 @@ public class CheckListRenderer implements ListitemRenderer<Object> {
 
     @Override
     public void render(Listitem listitem, Object obj, int index) throws Exception {
-
-        System.out.println("HAHAHAHAH");
         if (listitem instanceof Listgroup) {
             ChecklistGroupsModel.CheckListGroupInfo groupInfo = (ChecklistGroupsModel.CheckListGroupInfo) obj;
             ChecklistItem checklistItem = groupInfo.getFirstChild();
             String groupTxt;
-            System.out.println(groupInfo.getGroupIndex());
-            System.out.println(groupInfo.getColIndex());
-            System.out.println(groupInfo.getFirstChild().toString());
             switch (groupInfo.getColIndex()) {
                 case 0:
                     groupTxt = checklistItem.getChecklistGroup().getName();
@@ -37,14 +33,26 @@ public class CheckListRenderer implements ListitemRenderer<Object> {
             listitem.setValue(obj);
         } else if (listitem instanceof Listgroupfoot) {
             Listcell cell = new Listcell();
-            cell.setSclass("foodFooter");
-            cell.setSpan(6);
+            cell.setSclass("checklistFooter");
+            cell.setSpan(4);
             cell.appendChild(new Label("Total " + obj + " Items"));
             listitem.appendChild(cell);
         } else {
             ChecklistItem data = (ChecklistItem) obj;
+            String typeCheckString="";
+            String requireOutput="";
+            int typeCheck = data.getTypeCheck();
+            if(typeCheck== CheckType.SERVER_CHECK)
+                typeCheckString="Server Check";
+            else if(typeCheck==CheckType.API_CHECK)
+                typeCheckString="Rest Api";
+
+            String valuePass=data.getValuePass();
+
             listitem.appendChild(new Listcell(data.getChecklistGroup().getName()));
             listitem.appendChild(new Listcell(data.getName()));
+            listitem.appendChild(new Listcell(typeCheckString));
+            listitem.appendChild(new Listcell(valuePass));
             listitem.appendChild(new Listcell(data.getDescription()));
             listitem.appendChild(new Listcell(data.getServer().getName()));
             listitem.setValue(data);

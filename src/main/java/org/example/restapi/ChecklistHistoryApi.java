@@ -2,7 +2,8 @@ package org.example.restapi;
 
 import com.google.gson.Gson;
 import org.example.model.ChecklistHistory;
-import org.example.model.ChecklistItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ChecklistHistoryApi {
+
+    private static final Logger logger= LoggerFactory.getLogger(ChecklistHistoryApi.class);
 
     private static ChecklistHistoryApi checklistItemApi= new ChecklistHistoryApi();
 
@@ -31,6 +34,7 @@ public class ChecklistHistoryApi {
             ChecklistHistory[] checklistHistories = new Gson().fromJson(jsonString, ChecklistHistory[].class);
             return Arrays.asList(checklistHistories);
         } catch (Exception ex) {
+            logger.error(ex.getMessage());
             System.out.println(ex.getMessage());
             return null;
         }

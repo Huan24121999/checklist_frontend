@@ -2,6 +2,8 @@ package org.example.restapi;
 
 import com.google.gson.Gson;
 import org.example.model.ServerInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
@@ -11,7 +13,8 @@ import javax.ws.rs.core.Response;
 import java.util.*;
 
 public class ServerApi {
-    //    private static final Logger logger= LoggerFactory.getLogger(ChecklistGroupApi.class);
+    private static final Logger logger= LoggerFactory.getLogger(ChecklistGroupApi.class);
+
     private static ServerApi serverApi= new ServerApi();
 
     public static ServerApi getInstance(){
@@ -28,8 +31,7 @@ public class ServerApi {
             ServerInfo[] serverInfos = new Gson().fromJson(jsonString, ServerInfo[].class);
             return Arrays.asList(serverInfos);
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-//            logger.error(ex.getMessage());
+            logger.error(ex.getMessage());
             return null;
         }
     }
@@ -44,8 +46,7 @@ public class ServerApi {
             ServerInfo serverInfoResult = new Gson().fromJson(jsonString, ServerInfo.class);
             return serverInfoResult;
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-//            logger.error(ex.getMessage());
+            logger.error(ex.getMessage());
             return null;
         }
     }
@@ -60,8 +61,7 @@ public class ServerApi {
             ServerInfo serverInfoResult = new Gson().fromJson(jsonString, ServerInfo.class);
             return serverInfoResult;
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-//            logger.error(ex.getMessage());
+            logger.error(ex.getMessage());
             return null;
         }
     }
@@ -76,8 +76,7 @@ public class ServerApi {
                 return true;
             return false;
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-//            logger.error(ex.getMessage());
+            logger.error(ex.getMessage());
             return false;
         }
     }
