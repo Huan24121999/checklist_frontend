@@ -5,6 +5,9 @@ import org.zkoss.zul.GroupComparator;
 import java.io.Serializable;
 import java.util.Comparator;
 
+/**
+ * To compare checklist item each other
+ */
 public class ChecklistComparator implements Comparator<ChecklistItem>, GroupComparator<ChecklistItem>, Serializable {
 
     private static final long serialVersionUID = 1L;

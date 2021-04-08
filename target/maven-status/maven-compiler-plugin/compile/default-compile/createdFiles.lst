@@ -16,5 +16,4 @@ org\example\model\CheckType.class
 org\example\model\ChecklistHistory.class
 org\example\restapi\ChecklistHistoryApi.class
 org\example\model\ChecklistItem.class
-org\example\model\HistoryResult.class
 org\example\renderer\ChecklistComparator.class

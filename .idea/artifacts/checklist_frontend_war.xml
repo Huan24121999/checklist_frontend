@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="checklist_frontend:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>checklist_frontend</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="checklist_frontend-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="checklist_frontend:war exploded" />
+    </root>
+  </artifact>
+</component>

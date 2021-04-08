@@ -9,6 +9,11 @@ import lombok.NoArgsConstructor;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Checklist item (Test case) to check
+ *
+ * @author huannt14
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,6 +29,8 @@ public class ChecklistItem {
     private String action;
 
     private String valuePass;
+
+    private String operator;
 
     private Boolean isCheck;
 

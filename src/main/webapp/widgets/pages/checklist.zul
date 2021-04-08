@@ -2,7 +2,7 @@
     <n:div apply="org.zkoss.bind.BindComposer"
            viewModel="@id('vm') @init('org.example.viewmodel.ListGroupViewModel')">
 
-<!--        table for display checklist items-->
+        <!--        table for display checklist items-->
         <panel style="margin-bottom:10px"
                title="Checklist Items" border="normal"
                collapsible="true" open="@load(vm.visibleChecklist)">
@@ -12,7 +12,8 @@
                     <groupbox mold="3d" closable="false">
                         <vlayout>
                             <hlayout>
-                                <button label="Close/ Expand" sclass="btn btn-primary" onClick="@command('toggleGroup')"/>
+                                <button label="Close/ Expand" sclass="btn btn-primary"
+                                        onClick="@command('toggleGroup')"/>
                                 <button label="Refresh" sclass="btn btn-primary" onClick="@command('refresh')"/>
                                 <button label="Execute" sclass="btn btn-success" onClick="@command('execute')"/>
                             </hlayout>
@@ -37,7 +38,7 @@
         </panel>
 
 
-<!--        table for display executed result-->
+        <!--        table for display executed result-->
         <div id="history_view" class="card" visible="@load(vm.visibleHistory)">
             <div class="card-header border-transparent">
                 <n:h3 class="card-title">EXECUTED RESULT</n:h3>
@@ -58,7 +59,9 @@
                             </n:span>
 
                             <n:div class="info-box-content">
-                                <n:span class="info-box-text">Total</n:span>
+                                <n:b>
+                                    <n:span class="info-box-text">Total</n:span>
+                                </n:b>
                                 <n:span class="info-box-number">
                                     <label value="@load(vm.currentHistory.total)"></label>
                                     <n:small>test case</n:small>
@@ -73,7 +76,9 @@
                             </n:span>
 
                             <n:div class="info-box-content">
-                                <n:span class="info-box-text">Failed</n:span>
+                                <n:b>
+                                    <n:span class="info-box-text">Failed</n:span>
+                                </n:b>
                                 <n:span class="info-box-number">
                                     <label value="@load(vm.currentHistory.total- vm.currentHistory.passed)"></label>
                                     <n:small>test case</n:small>
@@ -90,7 +95,9 @@
                             </n:span>
 
                             <n:div class="info-box-content">
-                                <n:span class="info-box-text">Passed</n:span>
+                                <n:b>
+                                    <n:span class="info-box-text">Passed</n:span>
+                                </n:b>
                                 <n:span class="info-box-number">
                                     <label value="@load(vm.currentHistory.passed)"></label>
                                     <n:small>test case</n:small>
@@ -105,10 +112,14 @@
                             </n:span>
 
                             <n:div class="info-box-content">
-                                <n:span class="info-box-text">Reach Percent</n:span>
+                                <n:b>
+                                    <n:span class="info-box-text">Reach Percent</n:span>
+                                </n:b>
                                 <n:span class="info-box-number">
-                                    <label value="@load(Math.round(vm.currentHistory.passed*100/vm.currentHistory.total))"></label>
-                                    <n:small>%</n:small>
+                                    <n:b>
+                                        <label value="@load(Math.round(vm.currentHistory.passed*100/vm.currentHistory.total))"></label>
+                                        <n:small>%</n:small>
+                                    </n:b>
                                 </n:span>
                             </n:div>
                         </n:div>
@@ -120,24 +131,26 @@
                 <n:div class="table-responsive">
                     <grid id="grid-history" model="@bind(vm.historyResults)">
                         <columns>
-                            <column sort="auto" label="Type Check	"/>
-                            <column sort="auto" label="Name"/>
-                            <column sort="auto" label="Status"/>
+                            <column sort="auto(GroupCheck)" label="Type Check	"/>
+                            <column sort="auto(Name)" label="Name"/>
+                            <column sort="auto(IsPassed)" label="Status"/>
                             <column label="Description"/>
                         </columns>
                         <template name="model">
                             <row>
                                 <cell onClick="@command('selectGroupName',data=each.groupCheck)">
-                                    <label value="@load(each.groupCheck)" sclass="text-info"  style="cursor:hand;cursor:pointer"></label>
+                                    <label value="@load(each.groupCheck)" sclass="text-info"
+                                           style="cursor:hand;cursor:pointer"></label>
                                 </cell>
                                 <cell onClick="@command('selectItem',data=each.name)">
-                                    <label value="@load(each.name)" sclass="text-info" style="cursor:hand;cursor:pointer"></label>
+                                    <label value="@load(each.name)" sclass="text-info"
+                                           style="cursor:hand;cursor:pointer"></label>
                                 </cell>
                                 <cell>
-                                    <label if="${each.passed==true}" sclass="badge badge-success">
+                                    <label if="${each.isPassed==true}" sclass="badge badge-success">
                                         Passed
                                     </label>
-                                    <label if="${each.passed!=true}" value="Failed" sclass="badge badge-danger">
+                                    <label if="${each.isPassed!=true}" value="Failed" sclass="badge badge-danger">
                                         Failed
                                     </label>
                                 </cell>
@@ -156,14 +169,14 @@
                 <!-- /.table-responsive -->
             </n:div>
             <n:div class="card-footer clearfix">
-                <div class="btn btn-sm btn-info float-left ">Total
+                <div class="btn btn-sm btn-info float-left " onClick="@command('reExecute')">ReExecute:
                     <label value="@load(vm.currentHistory.total)"></label>
                 </div>
             </n:div>
         </div>
 
 
-<!--        table for display history checklist-->
+        <!--        table for display history checklist-->
         <panel style="margin-bottom:10px"
                title="Checklist History" border="normal" closable="false"
                collapsible="true">
@@ -175,13 +188,14 @@
                           model="@bind(vm.checklistHistories)"
                           mold="paging" pageSize="5">
                         <columns>
-                            <column hflex="2" sort="auto" label="Start #" align="left"/>
-                            <column hflex="2" sort="auto" label="End " align="left"/>
-                            <column hflex="2" sort="auto" label="Result " align="center"/>
-                            <column hflex="1" sort="auto" label="User" align="center"/>
+                            <column hflex="2" sort="auto(StartTime)" label="Start #" align="left"/>
+                            <column hflex="2" sort="auto(EndTime)" label="End " align="left"/>
+                            <column hflex="2" sort="auto(Result)" label="Result " align="center"/>
+                            <column hflex="1" sort="auto(Username)" label="User" align="center"/>
                         </columns>
                         <template name="model">
-                            <row onClick="@command('convertHistory', data=each.id)" sclass="history" style="cursor:hand;cursor:pointer">
+                            <row onClick="@command('showHistory', data=each.id)" sclass="history"
+                                 style="cursor:hand;cursor:pointer">
                                 <label value="@load(each.startTime)"/>
                                 <label value="@load(each.endTime)"/>
                                 <label value="@load(each.result)"/>

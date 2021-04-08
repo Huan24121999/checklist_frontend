@@ -40,21 +40,27 @@ public class CheckListRenderer implements ListitemRenderer<Object> {
         } else {
             ChecklistItem data = (ChecklistItem) obj;
             String typeCheckString="";
-            String requireOutput="";
             int typeCheck = data.getTypeCheck();
+
             if(typeCheck== CheckType.SERVER_CHECK)
                 typeCheckString="Server Check";
-            else if(typeCheck==CheckType.API_CHECK)
-                typeCheckString="Rest Api";
+            else if(typeCheck==CheckType.API_BOOLEAN_CHECK)
+                typeCheckString="RestApi: Boolean";
+            else if(typeCheck==CheckType.API_DATA_CHECK)
+                typeCheckString="RestApi: Comparison";
 
             String valuePass=data.getValuePass();
+            String operator= data.getOperator();
+            if(operator==null || operator.equals("==") || operator.equals("=")){
+                operator="";
+            }
 
-            listitem.appendChild(new Listcell(data.getChecklistGroup().getName()));
+            listitem.appendChild(new Listcell(data.getChecklistGroup()!= null?data.getChecklistGroup().getName():""));
             listitem.appendChild(new Listcell(data.getName()));
             listitem.appendChild(new Listcell(typeCheckString));
-            listitem.appendChild(new Listcell(valuePass));
+            listitem.appendChild(new Listcell(operator+valuePass));
             listitem.appendChild(new Listcell(data.getDescription()));
-            listitem.appendChild(new Listcell(data.getServer().getName()));
+            listitem.appendChild(new Listcell(data.getServer()!=null? data.getServer().getName():""));
             listitem.setValue(data);
         }
     }

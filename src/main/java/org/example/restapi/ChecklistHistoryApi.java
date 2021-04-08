@@ -14,6 +14,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Connection to server and resolve all http request regarding to checklist history
+ *
+ * @author huannt14
+ */
 public class ChecklistHistoryApi {
 
     private static final Logger logger= LoggerFactory.getLogger(ChecklistHistoryApi.class);

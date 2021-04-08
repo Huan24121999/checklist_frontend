@@ -1,9 +1,13 @@
 package org.example.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
+/**
+ * to store number of chosen items and the number of passed items
+ */
 @Data
+@AllArgsConstructor
 public class HistoryTotal {
     private int total;
 

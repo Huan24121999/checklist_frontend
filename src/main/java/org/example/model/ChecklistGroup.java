@@ -4,6 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Group of Checklist items
+ *
+ * @author huannt14
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

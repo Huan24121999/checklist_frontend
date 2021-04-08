@@ -13,6 +13,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.*;
 
+/**
+ * Connection to server and resolve all request regarding to checklist items
+ *
+ * @author huannt14
+ */
 public class ChecklistItemApi {
     private static final Logger logger= LoggerFactory.getLogger(ChecklistItemApi.class);
 
@@ -34,7 +39,7 @@ public class ChecklistItemApi {
         } catch (Exception ex) {
             logger.error(ex.getMessage());
             System.out.println(ex.getMessage());
-            return null;
+            return new ArrayList<ChecklistItem>();
         }
     }
 

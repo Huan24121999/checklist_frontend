@@ -6,6 +6,11 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
+/**
+ * History of each execution
+ *
+ * @author huannt14
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
